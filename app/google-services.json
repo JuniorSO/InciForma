@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "476836883143",
+    "project_id": "inciforma-43c8e",
+    "storage_bucket": "inciforma-43c8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476836883143:android:f3e8f4af4fd46911056ce2",
+        "android_client_info": {
+          "package_name": "com.example.inciforma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4H1CHU6zvsLGyz4ghfPODsU2idUqgTLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
