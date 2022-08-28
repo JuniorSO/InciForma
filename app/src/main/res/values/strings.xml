@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">InciForma</string>
-    <string name="addBtnText">Adicionar Incidente</string>
+    <string name="txtAddBtn">Adicionar Incidente</string>
+    <string name="txtEmail">Email</string>
+    <string name="txtSenha">Senha</string>
+    <string name="txtEntrar">Entrar</string>
+    <string name="txtCriar">Criar Conta</string>
+    <string name="txtQuestReg">Já tem uma conta?</string>
+    <string name="txtPrinReg">Criando uma conta</string>
+    <string name="txtQuestLog">Ainda não tem conta?</string>
+    <string name="txtPrinLog">Entrando em uma conta</string>
 </resources>
