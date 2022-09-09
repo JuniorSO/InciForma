@@ -1,12 +1,27 @@
 <resources>
-    <string name="app_name">InciForma</string>
-    <string name="txtAddBtn">Adicionar Incidente</string>
+    <string name="app_name" translatable="false">InciForma</string>
+    <string name="txtBtnAdd">Adicionar Incidente</string>
+
     <string name="txtEmail">Email</string>
     <string name="txtSenha">Senha</string>
     <string name="txtEntrar">Entrar</string>
     <string name="txtCriar">Criar Conta</string>
+
     <string name="txtQuestReg">Já tem uma conta?</string>
-    <string name="txtPrinReg">Criando uma conta</string>
+    <string name="txtTitleReg">Criando uma conta</string>
+
     <string name="txtQuestLog">Ainda não tem conta?</string>
-    <string name="txtPrinLog">Entrando em uma conta</string>
+    <string name="txtTitleLog">Entrando em uma conta</string>
+    <string name="txtGBtn">Entrar com conta Google</string>
+
+    <string name="txtTitleModal">Usuário Ativo:</string>
+    <string name="txtAltImgUser">Imagem de Perfil da Conta do Usuário</string>
+    <string name="plcHldUserName">[Nome do Usuário]</string>
+    <string name="plcHldUserEmail">[Email do Usuário]</string>
+    <string name="txtBtnDltAccount">Apagar Conta</string>
+    <string name="txtSair">Sair</string>
+    <string name="txtUID" translatable="false">UID:</string>
+    <string name="plcHldUserUID">[Unique ID do Usuário]</string>
+
+    <string name="webClientId" translatable="false">476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com</string>
 </resources>

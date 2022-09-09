@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="teal_100">#dcfce7</color>
-    <color name="teal_200">#bbf7d0</color>
+    <color name="teal_100">#ccfbf1</color>
+    <color name="teal_200">#99f6e4</color>
     <color name="teal_400">#2dd4bf</color>
-    <color name="teal_500">#10b981</color>
-    <color name="teal_700">#047857</color>
+    <color name="teal_500">#14b8a6</color>
+    <color name="teal_600">#0d9488</color>
+    <color name="teal_700">#0f766e</color>
+    <color name="red_500">#ef4444</color>
+    <color name="red_600">#dc2626</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="linkTextColor">@color/teal_500</color>
+    <color name="trueWhite">#fffbff</color>
+    <color name="trueBlack">#1c1b20</color>
+
+    <color name="linkTextColor">@color/teal_700</color>
+    <color name="dangerColor">@color/red_600</color>
+    <color name="dangerTextColor">@color/trueWhite</color>
+    <color name="buttonTextColor">@color/trueWhite</color>
+
+    <color name="bgModalColor">@color/trueWhite</color>
 </resources>

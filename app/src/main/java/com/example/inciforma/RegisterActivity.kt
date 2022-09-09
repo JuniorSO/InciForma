@@ -19,31 +19,41 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         auth = Firebase.auth
-
-        val currentUser = auth.currentUser
-
-        if(currentUser != null){
+        if(auth.currentUser != null){
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
-        findViewById<TextView>(R.id.txtLinkEntrar).setOnClickListener {
+        findViewById<TextView>(R.id.txtLink).setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         findViewById<Button>(R.id.btnRegister).setOnClickListener {
-            val edtEmail = findViewById<EditText>(R.id.edtEmailReg).text.toString()
-            val edtSenha = findViewById<EditText>(R.id.edtSenhaReg).text.toString()
+            val edtEmail = findViewById<EditText>(R.id.edtEmail).text.toString()
+            val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
             auth.createUserWithEmailAndPassword(edtEmail, edtSenha)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, make a toast with the signed-in user's information
-                        Toast.makeText(this, "Aproveite o nosso app!",
-                            Toast.LENGTH_SHORT).show()
+                        auth.currentUser!!.sendEmailVerification()
+                            .addOnCompleteListener { tasc ->
+                                if(tasc.isSuccessful) {
+                                Toast.makeText(baseContext, "Confirme seu email e realize o login.",
+                                    Toast.LENGTH_SHORT).show()
+                                    auth.signOut()
+                                }
+                                else {
+                                    Toast.makeText(baseContext, "Algo deu errado, verifique seu email.",
+                                    Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(baseContext, "Não foi possível criar a conta.",
@@ -51,5 +61,11 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

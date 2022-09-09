@@ -7,10 +7,10 @@
     android:padding="24dp">
 
     <TextView
-        android:id="@+id/txtPrincipal"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtPrinReg"
+        android:text="@string/txtTitleReg"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.551" >
 
         <EditText
-            android:id="@+id/edtEmailReg"
+            android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:inputType="textEmailAddress"
@@ -38,7 +38,7 @@
             android:autofillHints="emailAddress" />
 
         <EditText
-            android:id="@+id/edtSenhaReg"
+            android:id="@+id/edtSenha"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="32dp"
@@ -73,7 +73,7 @@
         app:layout_constraintTop_toTopOf="@+id/materialDivider">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtQuest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -82,11 +82,11 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/txtLinkEntrar"
+            android:id="@+id/txtLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_toRightOf="@+id/textView"
+            android:layout_toRightOf="@+id/txtQuest"
             android:text="@string/txtEntrar"
             android:textColor="@color/linkTextColor"
             android:textSize="16sp" />

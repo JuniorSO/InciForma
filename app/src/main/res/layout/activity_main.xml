@@ -43,12 +43,13 @@
 
         <Button
             style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:id="@+id/btnInci"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
-            android:text="@string/txtAddBtn"
+            android:text="@string/txtBtnAdd"
             app:icon="@drawable/ic_add"
             app:iconGravity="textStart" />
     </FrameLayout>

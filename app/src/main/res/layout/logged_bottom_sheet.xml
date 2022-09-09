@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingTop="24dp"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/txtTitleModal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/txtTitleModal"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/pfpUser"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_below="@+id/txtTitleModal"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="16dp"
+        android:contentDescription="@string/txtAltImgUser"
+        android:src="@drawable/pfp_user"
+        app:tint="@color/linkTextColor" />
+
+    <TextView
+        android:id="@+id/txtUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:layout_below="@+id/txtTitleModal"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toRightOf="@+id/pfpUser"
+        android:gravity="center_vertical"
+        android:text="@string/plcHldUserEmail"
+        android:textSize="16sp" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUserEmail"
+        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="24dp" />
+
+    <Button
+        android:id="@+id/btnDltAccount"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/materialDivider"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/btnLogout"
+        android:text="@string/txtBtnDltAccount"
+        android:textColor="@color/dangerColor" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/materialDivider"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/dangerColor"
+        android:text="@string/txtSair"
+        android:textColor="@color/dangerTextColor" />
+
+    <TextView
+        android:id="@+id/txtTitleUID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnLogout"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@+id/txtUserUID"
+        android:text="@string/txtUID"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/txtUserUID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnLogout"
+        android:layout_alignParentRight="true"
+        android:paddingRight="0dp"
+        android:text="@string/plcHldUserUID"
+        android:textSize="12sp" />
+
+</RelativeLayout>

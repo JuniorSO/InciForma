@@ -13,6 +13,7 @@ class AboutActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnMapa).setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }
