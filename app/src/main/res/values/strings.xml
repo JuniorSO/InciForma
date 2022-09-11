@@ -12,6 +12,7 @@
 
     <string name="txtQuestLog">Ainda não tem conta?</string>
     <string name="txtTitleLog">Entrando em uma conta</string>
+    <string name="txtEsqSenha">Esqueci minha senha</string>
     <string name="txtGBtn">Entrar com conta Google</string>
 
     <string name="txtTitleModal">Usuário Ativo:</string>
@@ -22,6 +23,11 @@
     <string name="txtSair">Sair</string>
     <string name="txtUID" translatable="false">UID:</string>
     <string name="plcHldUserUID">[Unique ID do Usuário]</string>
+    <string name="txtVerify">Reenviar Verificação</string>
+
+    <string name="txtTitleDialog">Excluir conta:</string>
+    <string name="txtMessageDialog">Você está prestes a excluir a conta ativa neste dispositvo. Tem certeza disso?</string>
+    <string name="txtCancelar">Cancelar</string>
 
     <string name="webClientId" translatable="false">476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com</string>
 </resources>

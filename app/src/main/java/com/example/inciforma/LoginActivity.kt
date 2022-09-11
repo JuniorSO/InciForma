@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -24,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient : GoogleSignInClient
+    private lateinit var dialog: AlertDialog
 
     private var openActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -77,8 +79,9 @@ class LoginActivity : AppCompatActivity() {
         txtBtnGoogle.text = getString(R.string.txtGBtn)
 
         auth = Firebase.auth
+        auth.setLanguageCode("pt")
 
-        val clientId = "476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com"
+        val clientId = getString(R.string.webClientId)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(clientId)
             .requestEmail()
@@ -104,25 +107,44 @@ class LoginActivity : AppCompatActivity() {
             val edtEmail = findViewById<EditText>(R.id.edtEmail).text.toString()
             val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
-            auth.signInWithEmailAndPassword(edtEmail, edtSenha)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, make a toast with the signed-in user's information
-                        Toast.makeText(baseContext, "Aproveite o nosso app!",
-                            Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(baseContext, "Não foi possível entrar na conta.",
-                            Toast.LENGTH_SHORT).show()
+            if(edtEmail == "" || edtSenha == "") {
+                Toast.makeText(baseContext, "Preencha os campos.",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                auth.signInWithEmailAndPassword(edtEmail, edtSenha)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, make a toast with the signed-in user's information
+                            Toast.makeText(
+                                baseContext, "Aproveite o nosso app!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(
+                                baseContext, "Não foi possível entrar na conta. Verifique as informações.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
+            }
         }
 
         findViewById<SignInButton>(R.id.btnGLogin).setOnClickListener{
             signInWithGoogle()
+        }
+
+        findViewById<TextView>(R.id.txtEsquecido).setOnClickListener {
+            val build = AlertDialog.Builder(this)
+            val view = layoutInflater.inflate(R.layout.dialog_password, null)
+
+            build.setView(view)
+
+            dialog = build.create()
+            dialog.show()
         }
     }
 

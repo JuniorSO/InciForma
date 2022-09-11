@@ -35,31 +35,42 @@ class RegisterActivity : AppCompatActivity() {
             val edtEmail = findViewById<EditText>(R.id.edtEmail).text.toString()
             val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
-            auth.createUserWithEmailAndPassword(edtEmail, edtSenha)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, make a toast with the signed-in user's information
-                        auth.currentUser!!.sendEmailVerification()
-                            .addOnCompleteListener { tasc ->
-                                if(tasc.isSuccessful) {
-                                Toast.makeText(baseContext, "Confirme seu email e realize o login.",
-                                    Toast.LENGTH_SHORT).show()
-                                    auth.signOut()
+            if(edtEmail == "" || edtSenha == "") {
+                Toast.makeText(baseContext, "Preencha os campos.",
+                    Toast.LENGTH_SHORT).show()
+            } else if(edtSenha.length < 6) {
+                Toast.makeText(baseContext, "A senha é muito curta.",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                auth.createUserWithEmailAndPassword(edtEmail, edtSenha)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            auth.currentUser!!.sendEmailVerification()
+                                .addOnCompleteListener { tasc ->
+                                    if (tasc.isSuccessful) {
+                                        Toast.makeText(
+                                            baseContext, "Confirme seu email e realize o login.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        auth.signOut()
+                                    } else {
+                                        Toast.makeText(
+                                            baseContext, "Não foi possível enviar o email de verificação.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
-                                else {
-                                    Toast.makeText(baseContext, "Algo deu errado, verifique seu email.",
-                                    Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(baseContext, "Não foi possível criar a conta.",
-                            Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(
+                                baseContext, "Não foi possível criar a conta.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
+            }
         }
     }
 

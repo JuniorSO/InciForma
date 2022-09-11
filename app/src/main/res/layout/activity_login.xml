@@ -27,39 +27,48 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/materialDivider"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551" >
+        app:layout_constraintVertical_bias="0.554">
 
         <EditText
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
             android:hint="@string/txtEmail"
-            android:autofillHints="emailAddress" />
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/edtSenha"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="32dp"
-            android:inputType="textPassword"
+            android:autofillHints="password"
             android:hint="@string/txtSenha"
-            android:autofillHints="password" />
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/txtEsquecido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txtEsqSenha"
+            android:textColor="@color/linkTextColor"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:textSize="16sp"
-            android:text="@string/txtEntrar" />
+            android:layout_marginTop="20dp"
+            android:text="@string/txtEntrar"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout" >
+        app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/btnGLogin"

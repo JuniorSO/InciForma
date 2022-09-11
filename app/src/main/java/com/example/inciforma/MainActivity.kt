@@ -5,8 +5,8 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -48,10 +49,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
             modal.show()
         }
-        else {
-            if (auth.currentUser!!.photoUrl == null) {
+        else if (auth.currentUser!!.photoUrl == null) {
                 val modal = BottomSheetDialog(this)
                 modal.setContentView(R.layout.logged_bottom_sheet)
+
+                if(!auth.currentUser!!.isEmailVerified){
+                    val btnVerify = modal.findViewById<Button>(R.id.btnVerify)!!
+                    btnVerify.visibility = View.VISIBLE
+                    btnVerify.setOnClickListener {
+                        auth.currentUser!!.sendEmailVerification()
+                            .addOnCompleteListener { task ->
+                                if(task.isSuccessful) {
+                                    Toast.makeText(baseContext, "Confirme seu email e realize o login.",
+                                        Toast.LENGTH_SHORT).show()
+                                    auth.signOut()
+                                    modal.dismiss()
+                                }
+                                else {
+                                    Toast.makeText(baseContext, "Algo deu errado, certifique seu email.",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    }
+                }
 
                 modal.findViewById<TextView>(R.id.txtUserEmail)!!.text = auth.currentUser!!.email
                 modal.findViewById<TextView>(R.id.txtUserUID)!!.text = auth.currentUser!!.uid
@@ -61,6 +81,31 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     Toast.makeText(baseContext, "Você saiu da conta.",
                         Toast.LENGTH_SHORT).show()
                     modal.dismiss()
+                }
+
+                modal.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
+                    try {
+                        auth.currentUser!!.delete()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(baseContext, "Conta excluída.",
+                                        Toast.LENGTH_SHORT).show()
+                                    modal.dismiss()
+                                }
+                                else {
+                                    Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
+                                        Toast.LENGTH_SHORT).show()
+                                    modal.dismiss()
+                                    auth.signOut()
+                                }
+                                }
+                    }
+                    catch(e: FirebaseAuthRecentLoginRequiredException) {
+                        Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
+                            Toast.LENGTH_SHORT).show()
+                        modal.dismiss()
+                        auth.signOut()
+                    }
                 }
 
                 modal.show()
@@ -83,15 +128,38 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     modal.dismiss()
                 }
 
+                modal.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
+                    try {
+                        auth.currentUser!!.delete()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(baseContext, "Conta excluída.",
+                                        Toast.LENGTH_SHORT).show()
+                                    modal.dismiss()
+                                }
+                                else {
+                                    Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
+                                        Toast.LENGTH_SHORT).show()
+                                    modal.dismiss()
+                                    auth.signOut()
+                                    }
+                                }
+                    }
+                    catch(e: FirebaseAuthRecentLoginRequiredException) {
+                        Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
+                            Toast.LENGTH_SHORT).show()
+                        modal.dismiss()
+                        auth.signOut()
+                    }
+                }
+
                 modal.show()
             }
         }
-    }
 
     private fun logStuff() {
         Log.i("ID DO USUÁRIO", auth.currentUser!!.displayName + " / " + auth.currentUser!!.uid + " / " + auth.currentUser  + " / " + auth.currentUser!!.email  + " / " + auth.currentUser!!.photoUrl)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,11 +184,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-
         findViewById<Button>(R.id.btnInci).setOnClickListener {
             if(auth.currentUser != null) {
-                //TODO: verificar se o usuário está com o e-mail verificado.
-                logStuff()
                 if(auth.currentUser!!.isEmailVerified) {
                     googleMap.addMarker(
                         MarkerOptions()

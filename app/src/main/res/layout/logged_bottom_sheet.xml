@@ -51,6 +51,16 @@
         android:layout_marginHorizontal="24dp" />
 
     <Button
+        android:id="@+id/btnVerify"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/materialDivider"
+        android:layout_marginLeft="24dp"
+        android:text="@string/txtVerify"
+        android:visibility="invisible" />
+
+    <Button
         android:id="@+id/btnDltAccount"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
