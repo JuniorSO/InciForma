@@ -1,6 +1,8 @@
 package com.example.inciforma
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.view.SimpleDraweeView
 import com.google.android.gms.maps.GoogleMap
@@ -24,6 +27,7 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var auth: FirebaseAuth
+    private lateinit var alert: AlertDialog
 
     private fun showUserModal() {
         if (auth.currentUser == null) {
@@ -76,6 +80,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 modal.findViewById<TextView>(R.id.txtUserEmail)!!.text = auth.currentUser!!.email
                 modal.findViewById<TextView>(R.id.txtUserUID)!!.text = auth.currentUser!!.uid
 
+                modal.findViewById<Button>(R.id.btnConfig)!!.setOnClickListener {
+                    modal.dismiss()
+                    val intent = Intent(this, ConfigActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
                 modal.findViewById<Button>(R.id.btnLogout)!!.setOnClickListener {
                     auth.signOut()
                     Toast.makeText(baseContext, "Você saiu da conta.",
@@ -84,28 +95,42 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 modal.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
-                    try {
-                        auth.currentUser!!.delete()
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    Toast.makeText(baseContext, "Conta excluída.",
-                                        Toast.LENGTH_SHORT).show()
-                                    modal.dismiss()
+                    val build = AlertDialog.Builder(this)
+                    val view = layoutInflater.inflate(R.layout.dialog_daccount, null)
+
+                    build.setView(view)
+
+                    view.findViewById<Button>(R.id.btnClose)!!.setOnClickListener { alert.dismiss() }
+                    view.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
+                        try {
+                            auth.currentUser!!.delete()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Toast.makeText(baseContext, "Conta excluída.",
+                                            Toast.LENGTH_SHORT).show()
+                                        modal.dismiss()
+                                    }
+                                    else {
+                                        Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
+                                            Toast.LENGTH_SHORT).show()
+                                        modal.dismiss()
+                                        auth.signOut()
+                                    }
                                 }
-                                else {
-                                    Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
-                                        Toast.LENGTH_SHORT).show()
-                                    modal.dismiss()
-                                    auth.signOut()
-                                }
-                                }
+                        }
+                        catch(e: FirebaseAuthRecentLoginRequiredException) {
+                            Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
+                                Toast.LENGTH_SHORT).show()
+                            modal.dismiss()
+                            auth.signOut()
+                        }
+
+                        alert.dismiss()
                     }
-                    catch(e: FirebaseAuthRecentLoginRequiredException) {
-                        Toast.makeText(baseContext, "Por favor, faça login novamente para excluir essa conta.",
-                            Toast.LENGTH_SHORT).show()
-                        modal.dismiss()
-                        auth.signOut()
-                    }
+
+                    alert = build.create()
+                    alert.show()
+                    alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 }
 
                 modal.show()
@@ -129,6 +154,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 modal.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
+                    val build = AlertDialog.Builder(this)
+                    val view = layoutInflater.inflate(R.layout.dialog_daccount, null)
+
+                    build.setView(view)
+
+                    view.findViewById<Button>(R.id.btnClose)!!.setOnClickListener { alert.dismiss() }
+                    view.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
                     try {
                         auth.currentUser!!.delete()
                             .addOnCompleteListener { task ->
@@ -151,6 +183,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         modal.dismiss()
                         auth.signOut()
                     }
+
+                        alert.dismiss()
+                    }
+
+                    alert = build.create()
+                    alert.show()
+                    alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 }
 
                 modal.show()

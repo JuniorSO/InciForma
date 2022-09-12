@@ -49,6 +49,10 @@
             android:exported="true"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

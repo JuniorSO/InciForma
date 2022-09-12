@@ -9,15 +9,31 @@
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/txtTitleModal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/txtTitleModal"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_marginHorizontal="24dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="8dp"
+            android:text="@string/txtTitleModal"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnConfig"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/descConfig"
+            app:icon="@drawable/ic_config" />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/pfpUser"

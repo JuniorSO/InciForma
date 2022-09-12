@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_alert"
+    android:orientation="vertical"
+    android:padding="24dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtTitleAlert">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/txtTitleDltConta"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnClose"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/descX"
+            app:icon="@drawable/ic_cross" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtMessageAlert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTitleAlert"
+        android:text="@string/txtMessageDltConta"
+        android:textSize="24sp"
+        android:layout_marginVertical="16dp" />
+
+    <Button
+        android:id="@+id/btnDltAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMessageAlert"
+        android:layout_alignParentRight="true"
+        android:backgroundTint="@color/dangerColor"
+        android:text="@string/txtBtnDltAccount"
+        android:textColor="@color/dangerTextColor" />
+
+</RelativeLayout>

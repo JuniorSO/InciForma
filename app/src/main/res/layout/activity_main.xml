@@ -17,6 +17,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
+                android:contentDescription="@string/descAbout"
                 app:icon="@drawable/ic_about"
                 app:iconGravity="textStart" />
 
@@ -27,6 +28,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:layout_marginRight="16dp"
+                android:contentDescription="@string/descUser"
                 app:icon="@drawable/ic_user"
                 app:iconGravity="textEnd" />
     </com.google.android.material.appbar.MaterialToolbar>
@@ -39,11 +41,12 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:ignore="FragmentTagUsage" />
 
         <Button
-            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
             android:id="@+id/btnInci"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -51,6 +54,7 @@
             android:layout_marginVertical="8dp"
             android:text="@string/txtBtnAdd"
             app:icon="@drawable/ic_add"
-            app:iconGravity="textStart" />
+            app:iconGravity="textStart"
+            tools:ignore="TextContrastCheck" />
     </FrameLayout>
 </LinearLayout>

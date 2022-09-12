@@ -2,6 +2,11 @@
     <string name="app_name" translatable="false">InciForma</string>
     <string name="txtBtnAdd">Adicionar Incidente</string>
 
+    <string name="descAbout">Ícone Sobre</string>
+    <string name="descUser">Ícone Usuário</string>
+    <string name="descX">Ícone de X</string>
+    <string name="descConfig">Ícone de Configuração</string>
+
     <string name="txtEmail">Email</string>
     <string name="txtSenha">Senha</string>
     <string name="txtEntrar">Entrar</string>
@@ -25,9 +30,20 @@
     <string name="plcHldUserUID">[Unique ID do Usuário]</string>
     <string name="txtVerify">Reenviar Verificação</string>
 
-    <string name="txtTitleDialog">Excluir conta:</string>
-    <string name="txtMessageDialog">Você está prestes a excluir a conta ativa neste dispositvo. Tem certeza disso?</string>
-    <string name="txtCancelar">Cancelar</string>
+    <string name="txtTitleDltConta">EXCLUINDO CONTA</string>
+    <string name="txtMessageDltConta">Você está prestes a excluir a conta ativa neste dispositvo. Tem certeza disso?</string>
+
+    <string name="txtAlertSenha">Insira o email da conta que deseja redefinir a senha:</string>
+    <string name="txtEnviar">Enviar</string>
+
+    <string name="txtTitleConfig">Realize a autenticação antes de alterar algo na conta.</string>
+    <string name="txtAutenticar">Autenticar</string>
+    <string name="txtAltEmail">Alterar Email</string>
+    <string name="txtNewEmail">Novo Email</string>
+    <string name="txtSaveEmail">Salvar Email</string>
+    <string name="txtAltSenha">Alterar Senha</string>
+    <string name="txtNewSenha">Novo Senha</string>
+    <string name="txtSaveSenha">Salvar Senha</string>
 
     <string name="webClientId" translatable="false">476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com</string>
 </resources>

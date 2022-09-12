@@ -1,6 +1,7 @@
 package com.example.inciforma
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -25,7 +26,7 @@ import com.google.firebase.ktx.Firebase
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient : GoogleSignInClient
-    private lateinit var dialog: AlertDialog
+    private lateinit var alert: AlertDialog
 
     private var openActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -143,8 +144,32 @@ class LoginActivity : AppCompatActivity() {
 
             build.setView(view)
 
-            dialog = build.create()
-            dialog.show()
+            view.findViewById<Button>(R.id.btnClose)!!.setOnClickListener { alert.dismiss() }
+            view.findViewById<Button>(R.id.btnEnviar)!!.setOnClickListener {
+                val edtEmail = view.findViewById<EditText>(R.id.edtEmail).text.toString()
+
+                if(edtEmail == "") {
+                    Toast.makeText(baseContext, "Preencha o campo.",
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    auth.sendPasswordResetEmail(edtEmail)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(baseContext, "Foi enviado o email para troca da senha.",
+                                    Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(baseContext, "Não foi possível enviar, verifique o email digitado.",
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                }
+
+                alert.dismiss()
+            }
+
+            alert = build.create()
+            alert.show()
+            alert.window!!.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         }
     }
 

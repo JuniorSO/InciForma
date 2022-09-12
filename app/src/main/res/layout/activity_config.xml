@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtTitleConfig"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/txtUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/plcHldUserEmail"
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edtSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/txtSenha"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/txtUserEmail"/>
+
+        <Button
+            android:id="@+id/btnAutenticar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtSenha"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="24dp"
+            android:text="@string/txtAutenticar" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ChangeEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+    <TextView
+        android:id="@+id/txtNewEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtAltEmail"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edtNewEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/txtNewEmail"
+        android:autofillHints="emailAddress"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/txtNewEmail"/>
+
+    <Button
+        android:id="@+id/btnNewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtSaveEmail"
+        android:layout_marginBottom="24dp"
+        android:layout_below="@+id/edtNewEmail"
+        android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ChangeSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+    <TextView
+        android:id="@+id/txtNewSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtAltSenha"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/edtNewSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/txtNewSenha"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/txtNewSenha"/>
+
+    <Button
+        android:id="@+id/btnNewSenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtSaveSenha"
+        android:layout_below="@+id/edtNewSenha"
+        android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</LinearLayout>
