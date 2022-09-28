@@ -2,39 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/txtTitleConfig"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/txtUserEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/plcHldUserEmail"
-        android:textSize="20sp"
-        android:layout_marginBottom="8dp"/>
+        <TextView
+            android:id="@+id/txtUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/plcHldUserEmail"
+            android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/edtSenha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/txtSenha"
-        android:autofillHints="password"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@+id/txtUserEmail"/>
+        <EditText
+            android:id="@+id/edtSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtUserEmail"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="password"
+            android:hint="@string/txtSenha"
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
 
         <Button
             android:id="@+id/btnAutenticar"
@@ -52,34 +52,34 @@
         android:layout_height="wrap_content"
         android:visibility="invisible">
 
-    <TextView
-        android:id="@+id/txtNewEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtAltEmail"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        <TextView
+            android:id="@+id/txtNewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/txtAltEmail"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/edtNewEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/txtNewEmail"
-        android:autofillHints="emailAddress"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@+id/txtNewEmail"/>
+        <EditText
+            android:id="@+id/edtNewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtNewEmail"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="emailAddress"
+            android:hint="@string/txtNewEmail"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp" />
 
-    <Button
-        android:id="@+id/btnNewEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txtSaveEmail"
-        android:layout_marginBottom="24dp"
-        android:layout_below="@+id/edtNewEmail"
-        android:layout_alignParentRight="true" />
+        <Button
+            android:id="@+id/btnNewEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtNewEmail"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="24dp"
+            android:text="@string/txtSaveEmail" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -88,33 +88,33 @@
         android:layout_height="wrap_content"
         android:visibility="invisible">
 
-    <TextView
-        android:id="@+id/txtNewSenha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtAltSenha"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        <TextView
+            android:id="@+id/txtNewSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/txtAltSenha"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/edtNewSenha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/txtNewSenha"
-        android:autofillHints="password"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@+id/txtNewSenha"/>
+        <EditText
+            android:id="@+id/edtNewSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtNewSenha"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="password"
+            android:hint="@string/txtNewSenha"
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
 
-    <Button
-        android:id="@+id/btnNewSenha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txtSaveSenha"
-        android:layout_below="@+id/edtNewSenha"
-        android:layout_alignParentRight="true" />
+        <Button
+            android:id="@+id/btnNewSenha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtNewSenha"
+            android:layout_alignParentRight="true"
+            android:text="@string/txtSaveSenha" />
     </RelativeLayout>
 
 </LinearLayout>

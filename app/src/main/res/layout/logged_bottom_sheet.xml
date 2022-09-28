@@ -13,7 +13,7 @@
         android:id="@+id/txtTitleModal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp" >
+        android:layout_marginHorizontal="24dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,8 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtUserEmail"
-        android:layout_marginBottom="8dp"
-        android:layout_marginHorizontal="24dp" />
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/btnVerify"

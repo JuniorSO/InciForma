@@ -4,8 +4,8 @@
 
     <string name="descAbout">Ícone Sobre</string>
     <string name="descUser">Ícone Usuário</string>
-    <string name="descX">Ícone de X</string>
-    <string name="descConfig">Ícone de Configuração</string>
+    <string name="descX">Ícone Fechar</string>
+    <string name="descConfig">Ícone Configuração</string>
 
     <string name="txtEmail">Email</string>
     <string name="txtSenha">Senha</string>
@@ -44,6 +44,15 @@
     <string name="txtAltSenha">Alterar Senha</string>
     <string name="txtNewSenha">Novo Senha</string>
     <string name="txtSaveSenha">Salvar Senha</string>
+
+    <string-array name="tipoInci">
+        <item>Acidente Veicular</item>
+        <item>Morte</item>
+        <item>Roubo</item>
+        <item>Explosão</item>
+        <item>Tiroteio</item>
+        <item>Agressão</item>
+    </string-array>
 
     <string name="webClientId" translatable="false">476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com</string>
 </resources>

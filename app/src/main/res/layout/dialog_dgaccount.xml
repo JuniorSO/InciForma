@@ -40,21 +40,11 @@
         android:text="@string/txtMessageDltConta"
         android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/edtSenha"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/txtMessageAlert"
-        android:layout_marginBottom="8dp"
-        android:autofillHints="password"
-        android:hint="@string/txtSenha"
-        android:inputType="textPassword" />
-
     <Button
         android:id="@+id/btnDltAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtSenha"
+        android:layout_below="@id/txtMessageAlert"
         android:layout_alignParentRight="true"
         android:backgroundTint="@color/dangerColor"
         android:text="@string/txtBtnDltAccount"

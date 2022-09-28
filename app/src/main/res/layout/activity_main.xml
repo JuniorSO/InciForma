@@ -9,39 +9,40 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
-            <Button
-                style="@style/Widget.Material3.Button.IconButton"
-                android:id="@+id/btnAbout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:contentDescription="@string/descAbout"
-                app:icon="@drawable/ic_about"
-                app:iconGravity="textStart" />
+        <Button
+            android:id="@+id/btnAbout"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:contentDescription="@string/descAbout"
+            app:icon="@drawable/ic_about"
+            app:iconGravity="textStart" />
 
-            <Button
-                style="@style/Widget.Material3.Button.IconButton"
-                android:id="@+id/btnUser"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_marginRight="16dp"
-                android:contentDescription="@string/descUser"
-                app:icon="@drawable/ic_user"
-                app:iconGravity="textEnd" />
+        <Button
+            android:id="@+id/btnUser"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@string/descUser"
+            app:icon="@drawable/ic_user"
+            app:iconGravity="textEnd" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
+        <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            map:uiZoomControls="false"
             tools:ignore="FragmentTagUsage" />
 
         <Button

@@ -19,10 +19,9 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         auth = Firebase.auth
+
         if(auth.currentUser != null){
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            backInMap()
         }
 
         findViewById<TextView>(R.id.txtLink).setOnClickListener {
@@ -35,11 +34,11 @@ class RegisterActivity : AppCompatActivity() {
             val edtEmail = findViewById<EditText>(R.id.edtEmail).text.toString()
             val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
-            if(edtEmail == "" || edtSenha == "") {
+            if(edtEmail.isEmpty() || edtSenha.isEmpty()) {
                 Toast.makeText(baseContext, "Preencha os campos.",
                     Toast.LENGTH_SHORT).show()
             } else if(edtSenha.length < 6) {
-                Toast.makeText(baseContext, "A senha é muito curta.",
+                Toast.makeText(baseContext, "Senha muito curta.",
                     Toast.LENGTH_SHORT).show()
             } else {
                 auth.createUserWithEmailAndPassword(edtEmail, edtSenha)
@@ -49,8 +48,8 @@ class RegisterActivity : AppCompatActivity() {
                                 .addOnCompleteListener { tasc ->
                                     if (tasc.isSuccessful) {
                                         Toast.makeText(
-                                            baseContext, "Confirme seu email e realize o login.",
-                                            Toast.LENGTH_SHORT
+                                            baseContext, "Email de verificação enviado, confirme seu email e realize o login.",
+                                            Toast.LENGTH_LONG
                                         ).show()
                                         auth.signOut()
                                     } else {
@@ -60,9 +59,12 @@ class RegisterActivity : AppCompatActivity() {
                                         ).show()
                                     }
                                 }
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                                .addOnFailureListener {
+                                    Toast.makeText(baseContext, "Não foi possível enviar o email de verificação, tente novamente mais tarde.",
+                                        Toast.LENGTH_LONG).show()
+                                }
+
+                            backInMap()
                         } else {
                             Toast.makeText(
                                 baseContext, "Não foi possível criar a conta.",
@@ -75,6 +77,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        backInMap()
+    }
+
+    private fun backInMap() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

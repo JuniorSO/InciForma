@@ -11,9 +11,17 @@ class AboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_about)
 
         findViewById<Button>(R.id.btnMapa).setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            backInMap()
         }
+    }
+
+    override fun onBackPressed() {
+        backInMap()
+    }
+
+    private fun backInMap() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

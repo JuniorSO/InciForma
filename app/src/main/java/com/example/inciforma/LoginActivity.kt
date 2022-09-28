@@ -25,49 +25,25 @@ import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient : GoogleSignInClient
+    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var alert: AlertDialog
 
     private var openActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {
-            result: ActivityResult ->
+    ) { result: ActivityResult ->
 
-        if(result.resultCode == RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             val intent = result.data
             val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
 
             try {
                 val account = task.getResult(ApiException::class.java)
                 signInWithGoogleActivity(account.idToken!!)
-            }
-            catch (exception: ApiException) {
-                Toast.makeText(baseContext, "Não foi possível entrar, tente novamente.",
-                    Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun signInWithGoogle() {
-        val intent = googleSignInClient.signInIntent
-        openActivity.launch(intent)
-    }
-
-    private fun signInWithGoogleActivity(token: String) {
-        val credential = GoogleAuthProvider.getCredential(token, null)
-
-        auth.signInWithCredential(credential).addOnCompleteListener(this) {
-                task: Task<AuthResult> ->
-            if(task.isSuccessful) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-                Toast.makeText(baseContext, "Aproveite o nosso app!",
-                    Toast.LENGTH_SHORT).show()
-            }
-            else {
-                Toast.makeText(baseContext, "Não foi possível entrar, tente novamente.",
-                    Toast.LENGTH_SHORT).show()
+            } catch (exception: ApiException) {
+                Toast.makeText(
+                    baseContext, "Não foi possível entrar, tente novamente.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -76,11 +52,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val txtBtnGoogle = findViewById<SignInButton>(R.id.btnGLogin).getChildAt(0) as TextView
-        txtBtnGoogle.text = getString(R.string.txtGBtn)
+        val btnGLogin = findViewById<SignInButton>(R.id.btnGLogin)
+        val txtBtnGLogin = btnGLogin.getChildAt(0) as TextView
+        txtBtnGLogin.text = getString(R.string.txtGBtn)
 
         auth = Firebase.auth
-        auth.setLanguageCode("pt")
 
         val clientId = getString(R.string.webClientId)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -91,11 +67,8 @@ class LoginActivity : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        val currentUser = auth.currentUser
-        if(currentUser != null){
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+        if (auth.currentUser != null) {
+            backInMap()
         }
 
         findViewById<TextView>(R.id.txtLink).setOnClickListener {
@@ -108,25 +81,25 @@ class LoginActivity : AppCompatActivity() {
             val edtEmail = findViewById<EditText>(R.id.edtEmail).text.toString()
             val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
-            if(edtEmail == "" || edtSenha == "") {
-                Toast.makeText(baseContext, "Preencha os campos.",
-                    Toast.LENGTH_SHORT).show()
+            if (edtEmail.isEmpty() || edtSenha.isEmpty()) {
+                Toast.makeText(
+                    baseContext, "Preencha os campos.",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 auth.signInWithEmailAndPassword(edtEmail, edtSenha)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, make a toast with the signed-in user's information
                             Toast.makeText(
                                 baseContext, "Aproveite o nosso app!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
+
+                            backInMap()
                         } else {
-                            // If sign in fails, display a message to the user.
                             Toast.makeText(
-                                baseContext, "Não foi possível entrar na conta. Verifique as informações.",
+                                baseContext,
+                                "Não foi possível entrar na conta. Verifique as informações.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -134,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<SignInButton>(R.id.btnGLogin).setOnClickListener{
+        btnGLogin.setOnClickListener {
             signInWithGoogle()
         }
 
@@ -148,19 +121,32 @@ class LoginActivity : AppCompatActivity() {
             view.findViewById<Button>(R.id.btnEnviar)!!.setOnClickListener {
                 val edtEmail = view.findViewById<EditText>(R.id.edtEmail).text.toString()
 
-                if(edtEmail == "") {
-                    Toast.makeText(baseContext, "Preencha o campo.",
-                        Toast.LENGTH_SHORT).show()
+                if (edtEmail.isEmpty()) {
+                    Toast.makeText(
+                        baseContext, "Preencha o campo.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     auth.sendPasswordResetEmail(edtEmail)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(baseContext, "Foi enviado o email para troca da senha.",
-                                    Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    baseContext, "Foi enviado o email para troca da senha.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
-                                Toast.makeText(baseContext, "Não foi possível enviar, verifique o email digitado.",
-                                    Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    baseContext,
+                                    "Não foi possível enviar, verifique o email digitado.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(
+                                baseContext, "Não foi possível enviar, tente novamente mais tarde.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                 }
 
@@ -174,8 +160,39 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        backInMap()
+    }
+
+    private fun backInMap() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun signInWithGoogle() {
+        val intent = googleSignInClient.signInIntent
+        openActivity.launch(intent)
+    }
+
+    private fun signInWithGoogleActivity(token: String) {
+        val credential = GoogleAuthProvider.getCredential(token, null)
+
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task: Task<AuthResult> ->
+                if (task.isSuccessful) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    Toast.makeText(
+                        baseContext, "Aproveite o nosso app!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        baseContext, "Não foi possível entrar, tente novamente.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 }

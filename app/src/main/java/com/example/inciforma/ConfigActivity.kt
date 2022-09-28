@@ -24,9 +24,11 @@ class ConfigActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnAutenticar).setOnClickListener {
             val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
-            if(edtSenha == "") {
-                Toast.makeText(baseContext, "Preencha o campo.",
-                    Toast.LENGTH_SHORT).show()
+            if (edtSenha.isEmpty()) {
+                Toast.makeText(
+                    baseContext, "Preencha o campo.",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 val credential = EmailAuthProvider
                     .getCredential(auth.currentUser!!.email.toString(), edtSenha)
@@ -37,8 +39,10 @@ class ConfigActivity : AppCompatActivity() {
                         findViewById<RelativeLayout>(R.id.ChangeSenha).visibility = View.VISIBLE
                     }
                     .addOnFailureListener {
-                        Toast.makeText(baseContext, "Não foi possível autenticar.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            baseContext, "Não foi possível autenticar.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             }
         }
@@ -46,19 +50,33 @@ class ConfigActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnNewEmail).setOnClickListener {
             val edtNewEmail = findViewById<EditText>(R.id.edtNewEmail).text.toString()
 
-            if(edtNewEmail == ""){
-                Toast.makeText(baseContext, "Preencha o campo de email.",
-                    Toast.LENGTH_SHORT).show()
+            if (edtNewEmail.isEmpty()) {
+                Toast.makeText(
+                    baseContext, "Preencha o campo de email.",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 auth.currentUser!!.updateEmail(edtNewEmail)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(baseContext, "Seu email foi atualizado, não esqueça de verificá-lo.",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                baseContext,
+                                "Seu email foi atualizado, não esqueça de verificá-lo.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
-                            Toast.makeText(baseContext, "Algo deu errado.",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                baseContext, "Algo deu errado.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            baseContext,
+                            "Não foi possível atualizar o email, tente novamente mais tarde.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             }
         }
@@ -66,19 +84,32 @@ class ConfigActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnNewSenha).setOnClickListener {
             val edtNewSenha = findViewById<EditText>(R.id.edtNewSenha).text.toString()
 
-            if(edtNewSenha == ""){
-                Toast.makeText(baseContext, "Preencha o campo de senha.",
-                    Toast.LENGTH_SHORT).show()
+            if (edtNewSenha.isEmpty()) {
+                Toast.makeText(
+                    baseContext, "Preencha o campo de senha.",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 auth.currentUser!!.updatePassword(edtNewSenha)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(baseContext, "Senha atualizada com sucesso.",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                baseContext, "Senha atualizada com sucesso.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
-                            Toast.makeText(baseContext, "Não foi possível atualizar a senha.",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                baseContext, "Não foi possível atualizar a senha.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            baseContext,
+                            "Não foi possível atualizar a senha, tente novamente mais tarde.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             }
         }
