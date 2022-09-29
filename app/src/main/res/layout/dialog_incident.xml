@@ -38,11 +38,18 @@
         android:layout_below="@id/txtTitleAlert"
         android:hint="Endereço" />
 
+    <EditText
+        android:id="@+id/edtBairro"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/edtLocal"
+        android:hint="Bairro" />
+
     <Spinner
         android:id="@+id/spnTipo"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_below="@id/edtLocal"
+        android:layout_below="@id/edtBairro"
         android:contentDescription="Tipo de incidente" />
 
     <EditText

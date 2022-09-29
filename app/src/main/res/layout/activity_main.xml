@@ -37,6 +37,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bgModalColor"
+            android:translationZ="1dp"
+            android:paddingHorizontal="16dp">
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="284dp"
+                android:layout_height="48dp"
+                android:hint="Procurar por um lugar..." />
+
+            <Button
+                android:id="@+id/btnSearch"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/edtSearch"
+                android:contentDescription="Ícone de Busca"
+                app:icon="@drawable/ic_search" />
+
+            <Button
+                android:id="@+id/btnRefresh"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:contentDescription="Ícone de Recarregar Mapa"
+                app:icon="@drawable/ic_reload" />
+        </RelativeLayout>
+
         <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"

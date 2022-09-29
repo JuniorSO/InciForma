@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_alert"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <RelativeLayout
+        android:id="@+id/txtTitleAlert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/inciType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="[Tipo de Incidente]"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnClose"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/descX"
+            app:icon="@drawable/ic_cross" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/inciAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtTitleAlert"
+        android:layout_marginBottom="8dp"
+        android:text="[Endereço do Incidente]"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/inciDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inciAddress"
+        android:layout_marginBottom="8dp"
+        android:text="[Descrição do Incidente]"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/inciDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inciDesc"
+        android:layout_marginBottom="26dp"
+        android:text="[Data do Incidente]"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnDltInci"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inciDate"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="8dp"
+        android:text="Excluir" />
+
+    <Button
+        android:id="@+id/btnEdtInci"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inciDate"
+        android:layout_toLeftOf="@id/btnDltInci"
+        android:text="Editar" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inciDate" >
+
+        <Button
+            android:id="@+id/btnDownVote"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Ícone de Voto Negativo"
+            app:icon="@drawable/ic_down" />
+
+        <TextView
+            android:id="@+id/inciRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btnDownVote"
+            android:text="0"
+            android:textSize="16sp"
+            android:layout_marginHorizontal="8dp"/>
+
+        <Button
+            android:id="@+id/btnUpVote"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/inciRate"
+            android:contentDescription="Ícone de Voto Positivo"
+            app:icon="@drawable/ic_up" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

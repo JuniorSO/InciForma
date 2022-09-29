@@ -12,18 +12,20 @@
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/drawable/ic_baseline_help_24.xml" value="0.221" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/drawable/ic_launcher_background.xml" value="0.221" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/drawable/ic_plus.xml" value="0.176" />
+        <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/drawable/ic_reload.xml" value="0.2205" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/drawable/ic_user.xml" value="0.194" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/drawable/pfp_user.xml" value="0.2195" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_about.xml" value="0.22161249472351202" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_config.xml" value="0.2" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_daccount.xml" value="0.4" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_login.xml" value="0.264" />
-        <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_daccount.xml" value="0.22530996152201796" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_delete.xml" value="0.11415134672937152" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_dgaccount.xml" value="0.22530996152201796" />
-        <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_incident.xml" value="0.1" />
+        <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_incident.xml" value="0.264" />
+        <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_marker.xml" value="0.264" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/dialog_password.xml" value="0.264" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/glogged_bottom_sheet.xml" value="0.4" />
         <entry key="..\:/Users/roger/AndroidStudioProjects/InciForma/app/src/main/res/layout/logged_bottom_sheet.xml" value="0.264" />
