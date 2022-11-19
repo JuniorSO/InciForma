@@ -4,5 +4,7 @@
     <color name="dangerColor">@color/red_500</color>
     <color name="dangerTextColor">@color/black</color>
 
+    <color name="btnBackground">#202f34</color>
+
     <color name="bgModalColor">@color/trueBlack</color>
 </resources>

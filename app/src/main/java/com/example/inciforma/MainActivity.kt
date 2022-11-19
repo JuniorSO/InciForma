@@ -2,6 +2,7 @@ package com.example.inciforma
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.location.Geocoder
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -27,18 +29,19 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.IOException
 import java.lang.NullPointerException
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var auth: FirebaseAuth
@@ -501,6 +504,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             build.setView(view)
 
             val id = marker.title.toString()
+            var upVoted = false
+            var downVoted = false
+
+            val btnDownVote = view.findViewById<Button>(R.id.btnDownVote)
+            val btnUpVote = view.findViewById<Button>(R.id.btnUpVote)
 
             view.findViewById<Button>(R.id.btnClose).setOnClickListener { alert.dismiss() }
             view.findViewById<Button>(R.id.btnDltInci).setOnClickListener {
@@ -520,13 +528,129 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-
                 alert.dismiss()
+            }
+            btnDownVote.setOnClickListener {
+                btnDownVote.isEnabled = false
+
+                if (!downVoted) {
+                    if(!upVoted) {
+                    db.collection("pings").document(id)
+                        .update("rate", FieldValue.increment(-1))
+
+                    db.collection("users").document(auth.currentUser!!.uid)
+                        .update("downVote", FieldValue.arrayUnion(id))
+
+                    db.collection("users").document(auth.currentUser!!.uid)
+                        .update("upVote", FieldValue.arrayRemove(id))
+
+                    var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                    rateAlt -= 1
+                    view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+
+                    btnDownVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                    } else if (upVoted) {
+                        db.collection("pings").document(id)
+                            .update("rate", FieldValue.increment(-2))
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("downVote", FieldValue.arrayUnion(id))
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("upVote", FieldValue.arrayRemove(id))
+
+                        var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                        rateAlt -= 2
+                        view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+
+                        btnUpVote.backgroundTintList = getColorStateList(R.color.transparent)
+                        btnDownVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+
+                        upVoted = false
+                    }
+
+                    downVoted = true
+                } else if(downVoted) {
+                    db.collection("pings").document(id)
+                        .update("rate", FieldValue.increment(1))
+
+                    db.collection("users").document(auth.currentUser!!.uid)
+                        .update("downVote", FieldValue.arrayRemove(id))
+
+                    var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                    rateAlt += 1
+                    view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+
+                    btnDownVote.backgroundTintList = getColorStateList(R.color.transparent)
+                    downVoted = false
+                }
+
+                btnDownVote.isEnabled = true
+            }
+            btnUpVote.setOnClickListener {
+                btnUpVote.isEnabled = false
+
+                if (!upVoted) {
+                    if(!downVoted) {
+                        db.collection("pings").document(id)
+                            .update("rate", FieldValue.increment(1))
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("upVote", FieldValue.arrayUnion(id))
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("downVote", FieldValue.arrayRemove(id))
+
+                        var rateAlt =
+                            view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                        rateAlt += 1
+                        view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+
+                        btnUpVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                    } else if (downVoted) {
+                        db.collection("pings").document(id)
+                            .update("rate", FieldValue.increment(2))
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("upVote", FieldValue.arrayUnion(id))
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("downVote", FieldValue.arrayRemove(id))
+
+                        var rateAlt =
+                            view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                        rateAlt += 2
+                        view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+
+                        btnDownVote.backgroundTintList = getColorStateList(R.color.transparent)
+                        btnUpVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+
+                        downVoted = false
+                    }
+
+                    upVoted = true
+                } else if(upVoted) {
+                    db.collection("pings").document(id)
+                        .update("rate", FieldValue.increment(-1))
+
+                    db.collection("users").document(auth.currentUser!!.uid)
+                        .update("upVote", FieldValue.arrayRemove(id))
+
+                    var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                    rateAlt -= 1
+                    view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+
+                    btnUpVote.backgroundTintList = getColorStateList(R.color.transparent)
+                    upVoted = false
+                }
+
+                btnUpVote.isEnabled = true
             }
 
             alert = build.create()
             alert.show()
             alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
 
             val ping = db.collection("pings").document(id)
             ping.get()
@@ -548,6 +672,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             )
                         val address = addresses[0].getAddressLine(0)
                         view.findViewById<TextView>(R.id.inciAddress).text = address
+
+                        if(auth.currentUser!!.uid == document.data!!["uid"].toString()) {
+                            view.findViewById<Button>(R.id.btnDltInci).visibility = View.VISIBLE
+                            view.findViewById<Button>(R.id.btnEdtInci).visibility = View.VISIBLE
+                        }
                     } catch (e: IOException) {
 
                     } catch (e: NullPointerException) {
@@ -568,6 +697,32 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+
+            db.collection("users").document(auth.currentUser!!.uid).get()
+                .addOnSuccessListener { document ->
+                        val downVoteArray = document.data!!["downVote"] as ArrayList<String>
+                        val upVoteArray = document.data!!["upVote"] as ArrayList<String>
+
+                        for (vote in downVoteArray) {
+                            if (vote == id) {
+                                downVoted = true
+                                upVoted = false
+                                btnDownVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                            }
+                        }
+                        for (vote in upVoteArray) {
+                            if (vote == id) {
+                                upVoted = true
+                                downVoted = false
+                                btnUpVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                            }
+                        }
+                    }
+
+            if(auth.currentUser != null){
+                btnDownVote.isEnabled = true
+                btnUpVote.isEnabled = true
+            }
 
             true
         }

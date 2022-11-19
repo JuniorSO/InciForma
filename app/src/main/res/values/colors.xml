@@ -18,5 +18,9 @@
     <color name="dangerTextColor">@color/trueWhite</color>
     <color name="buttonTextColor">@color/trueWhite</color>
 
+    <color name="btnBackground">#e3ebee</color>
+
+    <color name="transparent">@android:color/transparent</color>
+
     <color name="bgModalColor">@color/trueWhite</color>
 </resources>

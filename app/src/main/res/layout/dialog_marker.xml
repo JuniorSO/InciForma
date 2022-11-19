@@ -67,7 +67,8 @@
         android:layout_below="@id/inciDate"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="8dp"
-        android:text="Excluir" />
+        android:text="Excluir"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnEdtInci"
@@ -76,12 +77,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/inciDate"
         android:layout_toLeftOf="@id/btnDltInci"
-        android:text="Editar" />
+        android:text="Editar"
+        android:visibility="invisible" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/inciDate" >
+        android:layout_below="@id/inciDate">
 
         <Button
             android:id="@+id/btnDownVote"
@@ -89,6 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Ícone de Voto Negativo"
+            android:enabled="false"
             app:icon="@drawable/ic_down" />
 
         <TextView
@@ -96,10 +99,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginHorizontal="8dp"
             android:layout_toRightOf="@id/btnDownVote"
             android:text="0"
-            android:textSize="16sp"
-            android:layout_marginHorizontal="8dp"/>
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnUpVote"
@@ -108,6 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/inciRate"
             android:contentDescription="Ícone de Voto Positivo"
+            android:enabled="false"
             app:icon="@drawable/ic_up" />
 
     </RelativeLayout>
