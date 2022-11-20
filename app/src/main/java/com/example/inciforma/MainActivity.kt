@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         var userLocation = LatLng(-23.522223117110297, -46.476093277668845)
         map = googleMap
 
-        map.setPadding(0, 128, 0, 144)
+        map.setPadding(0, 0, 0, 144)
 
         map.setMinZoomPreference(3.0f)
         map.setMaxZoomPreference(20.0f)
