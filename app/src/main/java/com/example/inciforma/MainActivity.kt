@@ -2,7 +2,6 @@ package com.example.inciforma
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -13,7 +12,6 @@ import android.location.Geocoder
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -31,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
@@ -39,6 +38,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.IOException
+import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -92,8 +92,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         map.setMaxZoomPreference(20.0f)
 
         val db = Firebase.firestore
+        val collecPing = db.collection("pings")
 
-        db.collection("pings")
+        collecPing
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             .addOnFailureListener {
                 Toast.makeText(
-                    baseContext, "Ocorreu um erro ao tentar ler o banco.",
+                    baseContext, "Ocorreu um erro ao recuperar os marcadores.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -167,11 +168,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     map.isMyLocationEnabled = true
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15.0f))
-                } else {
-                    Toast.makeText(
-                        baseContext, "Por favor, ative o GPS.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
 
@@ -180,6 +176,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         findViewById<Button>(R.id.btnRefresh).setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         findViewById<Button>(R.id.btnSearch).setOnClickListener {
@@ -187,7 +184,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
             if (edtSearch.isEmpty()) {
                 Toast.makeText(
-                    baseContext, "Preencha o campo para pesquisar",
+                    baseContext, "Preencha o campo para pesquisar.",
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -196,18 +193,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         geocoder.getFromLocationName(
                             edtSearch, 1
                         )
-                    val address = addresses[0]
-                    val locationLat = address.latitude
-                    val locationLng = address.longitude
 
-                    map.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                locationLat,
-                                locationLng
-                            ), 19.0f
+                    if (addresses.isNotEmpty()) {
+                        val address = addresses[0]
+                        val locationLat = address.latitude
+                        val locationLng = address.longitude
+
+                        map.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(
+                                    locationLat,
+                                    locationLng
+                                ), 19.0f
+                            )
                         )
-                    )
+                    } else {
+                        Toast.makeText(
+                            baseContext,
+                            "Essa busca não obteve resultados.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } catch (e: IOException) {
                     Toast.makeText(
                         baseContext,
@@ -219,72 +225,69 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         findViewById<Button>(R.id.btnInci).setOnClickListener {
-            if (!locationPermissionGranted) {
-                getLocationPermission()
-            }
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null) {
                         userLocation = LatLng((location.latitude), location.longitude)
                         map.isMyLocationEnabled = true
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15.0f))
+                    }
 
-                        if (auth.currentUser != null) {
-                            if (auth.currentUser!!.isEmailVerified) {
-                                val build = AlertDialog.Builder(this)
-                                val view = layoutInflater.inflate(R.layout.dialog_incident, null)
+                    if (auth.currentUser != null) {
+                        if (auth.currentUser!!.isEmailVerified) {
+                            val build = AlertDialog.Builder(this)
+                            val view = layoutInflater.inflate(R.layout.dialog_incident, null)
 
-                                build.setView(view)
+                            build.setView(view)
 
-                                val spnType = view.findViewById<Spinner>(R.id.spnTipo)
-                                ArrayAdapter.createFromResource(
-                                    this, R.array.tipoInci,
-                                    android.R.layout.simple_spinner_item
-                                ).also { adapter ->
-                                    // Specify the layout to use when the list of choices appears
-                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                    // Apply the adapter to the spinner
-                                    spnType.adapter = adapter
+                            val spnType = view.findViewById<Spinner>(R.id.spnTipo)
+                            ArrayAdapter.createFromResource(
+                                this, R.array.tipoInci,
+                                android.R.layout.simple_spinner_item
+                            ).also { adapter ->
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                spnType.adapter = adapter
 
-                                    view.findViewById<Button>(R.id.btnClose)
-                                        .setOnClickListener { alert.dismiss() }
-                                    view.findViewById<Button>(R.id.btnNovoInci).setOnClickListener {
-                                        val edtLocal =
-                                            view.findViewById<EditText>(R.id.edtLocal).text.toString()
-                                        val edtBairro =
-                                            view.findViewById<EditText>(R.id.edtBairro).text.toString()
-                                        val edtDesc =
-                                            view.findViewById<EditText>(R.id.edtDesc).text.toString()
-                                        val simpleDateFormat =
-                                            SimpleDateFormat("HH:mm:ss, dd/MM/yyyy", Locale.ENGLISH)
+                                view.findViewById<Button>(R.id.btnClose)
+                                    .setOnClickListener { alert.dismiss() }
 
-                                        if (edtLocal.isEmpty() || edtDesc.isEmpty() || edtBairro.isEmpty()) {
-                                            Toast.makeText(
-                                                baseContext, "Preencha todos os campos.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        } else {
+                                view.findViewById<Button>(R.id.btnNovoInci).setOnClickListener {
+                                    val edtLocal =
+                                        view.findViewById<EditText>(R.id.edtLocal).text.toString()
+                                    val edtBairro =
+                                        view.findViewById<EditText>(R.id.edtBairro).text.toString()
+                                    val edtDesc =
+                                        view.findViewById<EditText>(R.id.edtDesc).text.toString()
+                                    val simpleDateFormat =
+                                        SimpleDateFormat("HH:mm, dd/MM/yyyy", Locale.ENGLISH)
 
-                                            val type = spnType.selectedItem.toString()
-                                            val time = simpleDateFormat.format(location.time)
-                                            var locationLat = -23.52305446306669
-                                            var locationLng = -46.47576908722295
+                                    if (edtLocal.isEmpty() || edtDesc.isEmpty() || edtBairro.isEmpty()) {
+                                        Toast.makeText(
+                                            baseContext, "Preencha todos os campos.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
 
-                                            try {
-                                                val addresses: List<Address> =
-                                                    geocoder.getFromLocationName(
-                                                        "$edtLocal - $edtBairro", 1
-                                                    )
-                                                val address = addresses[0]
-                                                locationLat = address.latitude
-                                                locationLng = address.longitude
-                                            } catch (e: IOException) {
-                                                Toast.makeText(
-                                                    baseContext,
-                                                    "Ocorreu um erro ao tentar procurar este endereço.",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
-                                            }
+                                        val type = spnType.selectedItem.toString()
+                                        val time = simpleDateFormat.format(location.time)
+                                        var locationLat = -23.52305446306669
+                                        var locationLng = -46.47576908722295
+
+                                        val data = Date().time
+                                        val dataExpirada = data + (86400000 * 5)
+                                        val dataConvertida = Date(dataExpirada)
+
+                                        val expired = Timestamp(dataConvertida)
+
+                                        try {
+                                            val addresses: List<Address> =
+                                                geocoder.getFromLocationName(
+                                                    "$edtLocal - $edtBairro", 1
+                                                )
+
+                                            val address = addresses[0]
+                                            locationLat = address.latitude
+                                            locationLng = address.longitude
 
                                             val ping = hashMapOf(
                                                 "latitude" to locationLat,
@@ -292,11 +295,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                                 "type" to type,
                                                 "description" to edtDesc,
                                                 "rate" to 0,
-                                                "time" to time,
+                                                "expiredAt" to expired,
+                                                "timePhone" to time,
                                                 "uid" to auth.currentUser!!.uid
                                             )
 
-                                            db.collection("pings")
+                                            collecPing
                                                 .add(ping)
                                                 .addOnSuccessListener { document ->
                                                     Toast.makeText(
@@ -323,7 +327,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                                 .addOnFailureListener {
                                                     Toast.makeText(
                                                         baseContext,
-                                                        "Não foi possível registrar o marcador. Tente novamente mais tarde.",
+                                                        "Não foi possível registrar o marcador. Tente novamente.",
                                                         Toast.LENGTH_LONG
                                                     ).show()
                                                 }
@@ -336,33 +340,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                                     ), 15.0f
                                                 )
                                             )
+                                        } catch (e: IOException) {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Ocorreu um erro ao tentar procurar este endereço.",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        } catch (e: IndexOutOfBoundsException) {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Esse endereço não retornou resultados.",
+                                                Toast.LENGTH_LONG
+                                            ).show()
                                         }
 
                                         alert.dismiss()
                                     }
                                 }
-
-                                alert = build.create()
-                                alert.show()
-                                alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                            } else {
-                                Toast.makeText(
-                                    baseContext, "Verifique seu email antes de criar incidentes.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                             }
+
+                            alert = build.create()
+                            alert.show()
+                            alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         } else {
                             Toast.makeText(
-                                baseContext,
-                                "Você precisa de uma conta ativa antes de criar incidentes.",
-                                Toast.LENGTH_LONG
+                                baseContext, "Verifique seu email antes de criar incidentes.",
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     } else {
                         Toast.makeText(
-                            baseContext, "Por favor, ative o GPS.",
-                            Toast.LENGTH_SHORT
+                            baseContext,
+                            "Você precisa de uma conta ativa antes de criar incidentes.",
+                            Toast.LENGTH_LONG
                         ).show()
                     }
                 }
@@ -370,7 +380,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     if (auth.currentUser != null) {
                         if (auth.currentUser!!.isEmailVerified) {
                             val build = AlertDialog.Builder(this)
-                            val view = layoutInflater.inflate(R.layout.dialog_incident, null)
+                            val view =
+                                layoutInflater.inflate(R.layout.dialog_incident, null)
 
                             build.setView(view)
 
@@ -379,101 +390,121 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 this, R.array.tipoInci,
                                 android.R.layout.simple_spinner_item
                             ).also { adapter ->
-                                // Specify the layout to use when the list of choices appears
                                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                // Apply the adapter to the spinner
                                 spnType.adapter = adapter
 
                                 view.findViewById<Button>(R.id.btnClose)
                                     .setOnClickListener { alert.dismiss() }
-                                view.findViewById<Button>(R.id.btnNovoInci).setOnClickListener {
-                                    val edtLocal =
-                                        view.findViewById<EditText>(R.id.edtLocal).text.toString()
-                                    val edtBairro =
-                                        view.findViewById<EditText>(R.id.edtBairro).text.toString()
-                                    val edtDesc =
-                                        view.findViewById<EditText>(R.id.edtDesc).text.toString()
-                                    val simpleDateFormat =
-                                        SimpleDateFormat("HH:mm:ss, dd/MM/yyyy", Locale.ENGLISH)
+                                view.findViewById<Button>(R.id.btnNovoInci)
+                                    .setOnClickListener {
+                                        val edtLocal =
+                                            view.findViewById<EditText>(R.id.edtLocal).text.toString()
+                                        val edtBairro =
+                                            view.findViewById<EditText>(R.id.edtBairro).text.toString()
+                                        val edtDesc =
+                                            view.findViewById<EditText>(R.id.edtDesc).text.toString()
+                                        val simpleDateFormat =
+                                            SimpleDateFormat(
+                                                "HH:mm, dd/MM/yyyy",
+                                                Locale.ENGLISH
+                                            )
 
-                                    if (edtLocal.isEmpty() || edtDesc.isEmpty() || edtBairro.isEmpty()) {
-                                        Toast.makeText(
-                                            baseContext, "Preencha todos os campos.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    } else {
-
-                                        val type = spnType.selectedItem.toString()
-                                        val time = simpleDateFormat.format(Date())
-                                        var locationLat = -23.52305446306669
-                                        var locationLng = -46.47576908722295
-
-                                        try {
-                                            val addresses: List<Address> =
-                                                geocoder.getFromLocationName(
-                                                    "$edtLocal - $edtBairro",
-                                                    1
-                                                )
-                                            val address = addresses[0]
-                                            locationLat = address.latitude
-                                            locationLng = address.longitude
-                                        } catch (e: IOException) {
+                                        if (edtLocal.isEmpty() || edtDesc.isEmpty() || edtBairro.isEmpty()) {
                                             Toast.makeText(
-                                                baseContext,
-                                                "Ocorreu um erro ao tentar procurar este endereço.",
-                                                Toast.LENGTH_LONG
+                                                baseContext, "Preencha todos os campos.",
+                                                Toast.LENGTH_SHORT
                                             ).show()
-                                        }
+                                        } else {
 
-                                        val ping = hashMapOf(
-                                            "latitude" to locationLat,
-                                            "longitude" to locationLng,
-                                            "type" to type,
-                                            "description" to edtDesc,
-                                            "rate" to 0,
-                                            "time" to time,
-                                            "uid" to auth.currentUser!!.uid
-                                        )
+                                            val type = spnType.selectedItem.toString()
+                                            val time = simpleDateFormat.format(Date())
+                                            var locationLat = -23.52305446306669
+                                            var locationLng = -46.47576908722295
 
-                                        db.collection("pings")
-                                            .add(ping)
-                                            .addOnSuccessListener { document ->
-                                                Toast.makeText(
-                                                    baseContext, "Marcador registrado.",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                            val data = Date().time
+                                            val dataExpirada = data + (86400000 * 5)
+                                            val dataConvertida = Date(dataExpirada)
 
-                                                map.addMarker(
-                                                    MarkerOptions()
-                                                        .position(LatLng(locationLat, locationLng))
-                                                        .title(document.id)
-                                                        .icon(
-                                                            BitmapDescriptorFactory.defaultMarker(
-                                                                BitmapDescriptorFactory.HUE_CYAN
-                                                            )
-                                                        )
+                                            val expired = Timestamp(dataConvertida)
+
+                                            try {
+                                                val addresses: List<Address> =
+                                                    geocoder.getFromLocationName(
+                                                        "$edtLocal - $edtBairro", 1
+                                                    )
+
+                                                val address = addresses[0]
+                                                locationLat = address.latitude
+                                                locationLng = address.longitude
+
+                                                val ping = hashMapOf(
+                                                    "latitude" to locationLat,
+                                                    "longitude" to locationLng,
+                                                    "type" to type,
+                                                    "description" to edtDesc,
+                                                    "rate" to 0,
+                                                    "expiredAt" to expired,
+                                                    "timePhone" to time,
+                                                    "uid" to auth.currentUser!!.uid
                                                 )
-                                            }
-                                            .addOnFailureListener {
+
+                                                collecPing
+                                                    .add(ping)
+                                                    .addOnSuccessListener { document ->
+                                                        Toast.makeText(
+                                                            baseContext, "Marcador registrado.",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+
+                                                        map.addMarker(
+                                                            MarkerOptions()
+                                                                .position(
+                                                                    LatLng(
+                                                                        locationLat,
+                                                                        locationLng
+                                                                    )
+                                                                )
+                                                                .title(document.id)
+                                                                .icon(
+                                                                    BitmapDescriptorFactory.defaultMarker(
+                                                                        BitmapDescriptorFactory.HUE_CYAN
+                                                                    )
+                                                                )
+                                                        )
+                                                    }
+                                                    .addOnFailureListener {
+                                                        Toast.makeText(
+                                                            baseContext,
+                                                            "Não foi possível registrar o marcador. Tente novamente.",
+                                                            Toast.LENGTH_LONG
+                                                        ).show()
+                                                    }
+
+                                                map.moveCamera(
+                                                    CameraUpdateFactory.newLatLngZoom(
+                                                        LatLng(
+                                                            locationLat,
+                                                            locationLng
+                                                        ), 15.0f
+                                                    )
+                                                )
+                                            } catch (e: IOException) {
                                                 Toast.makeText(
                                                     baseContext,
-                                                    "Não foi possível registrar o marcador. Tente novamente mais tarde.",
+                                                    "Ocorreu um erro ao tentar procurar este endereço.",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            } catch (e: IndexOutOfBoundsException) {
+                                                Toast.makeText(
+                                                    baseContext,
+                                                    "Esse endereço não retornou resultados.",
                                                     Toast.LENGTH_LONG
                                                 ).show()
                                             }
 
-                                        map.moveCamera(
-                                            CameraUpdateFactory.newLatLngZoom(
-                                                LatLng(
-                                                    locationLat,
-                                                    locationLng
-                                                ), 15.0f
-                                            )
-                                        )
+                                            alert.dismiss()
+                                        }
                                     }
-
-                                    alert.dismiss()
-                                }
                             }
 
                             alert = build.create()
@@ -482,7 +513,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         } else {
                             Toast.makeText(
-                                baseContext, "Verifique seu email antes de criar incidentes.",
+                                baseContext,
+                                "Verifique seu email antes de criar incidentes.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -511,8 +543,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val btnUpVote = view.findViewById<Button>(R.id.btnUpVote)
 
             view.findViewById<Button>(R.id.btnClose).setOnClickListener { alert.dismiss() }
+
             view.findViewById<Button>(R.id.btnDltInci).setOnClickListener {
-                db.collection("pings").document(id)
+                collecPing.document(id)
                     .delete()
                     .addOnSuccessListener {
                         Toast.makeText(
@@ -528,29 +561,35 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+
                 alert.dismiss()
             }
+
             btnDownVote.setOnClickListener {
                 btnDownVote.isEnabled = false
 
+                val inciRate = view.findViewById<TextView>(R.id.inciRate)
+
                 if (!downVoted) {
-                    if(!upVoted) {
-                    db.collection("pings").document(id)
-                        .update("rate", FieldValue.increment(-1))
+                    if (!upVoted) {
+                        collecPing.document(id)
+                            .update("rate", FieldValue.increment(-1))
 
-                    db.collection("users").document(auth.currentUser!!.uid)
-                        .update("downVote", FieldValue.arrayUnion(id))
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("downVote", FieldValue.arrayUnion(id))
 
-                    db.collection("users").document(auth.currentUser!!.uid)
-                        .update("upVote", FieldValue.arrayRemove(id))
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .update("upVote", FieldValue.arrayRemove(id))
 
-                    var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
-                    rateAlt -= 1
-                    view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+                        var rateAlt =
+                            inciRate.text.toString().toInt()
+                        rateAlt -= 1
+                        inciRate.text = rateAlt.toString()
 
-                    btnDownVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                        btnDownVote.backgroundTintList =
+                            getColorStateList(R.color.btnBackground)
                     } else if (upVoted) {
-                        db.collection("pings").document(id)
+                        collecPing.document(id)
                             .update("rate", FieldValue.increment(-2))
 
                         db.collection("users").document(auth.currentUser!!.uid)
@@ -559,27 +598,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         db.collection("users").document(auth.currentUser!!.uid)
                             .update("upVote", FieldValue.arrayRemove(id))
 
-                        var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                        var rateAlt =
+                            inciRate.text.toString().toInt()
                         rateAlt -= 2
-                        view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+                        inciRate.text = rateAlt.toString()
 
                         btnUpVote.backgroundTintList = getColorStateList(R.color.transparent)
-                        btnDownVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                        btnDownVote.backgroundTintList =
+                            getColorStateList(R.color.btnBackground)
 
                         upVoted = false
                     }
 
                     downVoted = true
-                } else if(downVoted) {
-                    db.collection("pings").document(id)
+                } else if (downVoted) {
+                    collecPing.document(id)
                         .update("rate", FieldValue.increment(1))
 
                     db.collection("users").document(auth.currentUser!!.uid)
                         .update("downVote", FieldValue.arrayRemove(id))
 
-                    var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                    var rateAlt =
+                        inciRate.text.toString().toInt()
                     rateAlt += 1
-                    view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+                    inciRate.text = rateAlt.toString()
 
                     btnDownVote.backgroundTintList = getColorStateList(R.color.transparent)
                     downVoted = false
@@ -587,12 +629,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 btnDownVote.isEnabled = true
             }
+
             btnUpVote.setOnClickListener {
                 btnUpVote.isEnabled = false
 
+                val inciRate = view.findViewById<TextView>(R.id.inciRate)
+
                 if (!upVoted) {
-                    if(!downVoted) {
-                        db.collection("pings").document(id)
+                    if (!downVoted) {
+                        collecPing.document(id)
                             .update("rate", FieldValue.increment(1))
 
                         db.collection("users").document(auth.currentUser!!.uid)
@@ -602,13 +647,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             .update("downVote", FieldValue.arrayRemove(id))
 
                         var rateAlt =
-                            view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                            inciRate.text.toString().toInt()
                         rateAlt += 1
-                        view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+                        inciRate.text = rateAlt.toString()
 
                         btnUpVote.backgroundTintList = getColorStateList(R.color.btnBackground)
                     } else if (downVoted) {
-                        db.collection("pings").document(id)
+                        collecPing.document(id)
                             .update("rate", FieldValue.increment(2))
 
                         db.collection("users").document(auth.currentUser!!.uid)
@@ -618,9 +663,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             .update("downVote", FieldValue.arrayRemove(id))
 
                         var rateAlt =
-                            view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                            inciRate.text.toString().toInt()
                         rateAlt += 2
-                        view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+                        inciRate.text = rateAlt.toString()
 
                         btnDownVote.backgroundTintList = getColorStateList(R.color.transparent)
                         btnUpVote.backgroundTintList = getColorStateList(R.color.btnBackground)
@@ -629,16 +674,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
 
                     upVoted = true
-                } else if(upVoted) {
-                    db.collection("pings").document(id)
+                } else if (upVoted) {
+                    collecPing.document(id)
                         .update("rate", FieldValue.increment(-1))
 
                     db.collection("users").document(auth.currentUser!!.uid)
                         .update("upVote", FieldValue.arrayRemove(id))
 
-                    var rateAlt = view.findViewById<TextView>(R.id.inciRate).text.toString().toInt()
+                    var rateAlt =
+                        inciRate.text.toString().toInt()
                     rateAlt -= 1
-                    view.findViewById<TextView>(R.id.inciRate).text = rateAlt.toString()
+                    inciRate.text = rateAlt.toString()
 
                     btnUpVote.backgroundTintList = getColorStateList(R.color.transparent)
                     upVoted = false
@@ -651,8 +697,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             alert.show()
             alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+            val inciRate = view.findViewById<TextView>(R.id.inciRate)
+            val btnEdtInci = view.findViewById<Button>(R.id.btnEdtInci)
 
-            val ping = db.collection("pings").document(id)
+            val ping = collecPing.document(id)
             ping.get()
                 .addOnSuccessListener { document ->
                     try {
@@ -661,8 +709,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         view.findViewById<TextView>(R.id.inciDesc).text =
                             document.data!!["description"].toString()
                         view.findViewById<TextView>(R.id.inciDate).text =
-                            document.data!!["time"].toString()
-                        view.findViewById<TextView>(R.id.inciRate).text =
+                            document.data!!["timePhone"].toString()
+                        inciRate.text =
                             document.data!!["rate"].toString()
                         val addresses: List<Address> =
                             geocoder.getFromLocation(
@@ -673,9 +721,102 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         val address = addresses[0].getAddressLine(0)
                         view.findViewById<TextView>(R.id.inciAddress).text = address
 
-                        if(auth.currentUser!!.uid == document.data!!["uid"].toString()) {
+                        val data = Date().time
+
+                        val dataInci = document.data!!["expiredAt"] as Timestamp
+                        val dataConv = dataInci.toDate()
+                        val dataLimite = dataConv.time - (86400000 * 4)
+
+                        if (data > dataLimite) {
+                            btnEdtInci.isEnabled = false
+                        }
+
+                        if (auth.currentUser?.uid == "fWun97jpwehIuxkkcaoAiC2W7zu2") {
+                            btnEdtInci.visibility = View.VISIBLE
                             view.findViewById<Button>(R.id.btnDltInci).visibility = View.VISIBLE
-                            view.findViewById<Button>(R.id.btnEdtInci).visibility = View.VISIBLE
+                        }
+
+                        if (auth.currentUser?.uid == document.data!!["uid"].toString()) {
+                            btnDownVote.isEnabled = false
+                            btnUpVote.isEnabled = false
+
+                            btnEdtInci.visibility = View.VISIBLE
+                            view.findViewById<Button>(R.id.btnDltInci).visibility = View.VISIBLE
+                        }
+
+                        btnEdtInci.setOnClickListener {
+                            alert.dismiss()
+                            val buildEdt = AlertDialog.Builder(this)
+                            val viewEdt =
+                                layoutInflater.inflate(R.layout.dialog_incident, null)
+
+                            val btnSalvar = viewEdt.findViewById<Button>(R.id.btnNovoInci)
+
+                            val spnType = viewEdt.findViewById<Spinner>(R.id.spnTipo)
+                            ArrayAdapter.createFromResource(
+                                this, R.array.tipoInci,
+                                android.R.layout.simple_spinner_item
+                            ).also { adapter ->
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                spnType.adapter = adapter
+
+                                buildEdt.setView(viewEdt)
+
+                                viewEdt.findViewById<TextView>(R.id.txtCriarIncidente).text =
+                                    getString(R.string.txtEditarInci)
+                                viewEdt.findViewById<TextView>(R.id.edtLocal).visibility =
+                                    View.GONE
+                                viewEdt.findViewById<TextView>(R.id.edtBairro).visibility =
+                                    View.GONE
+                                viewEdt.findViewById<TextView>(R.id.edtDesc).text =
+                                    document.data!!["description"].toString()
+                                btnSalvar.text = getString(R.string.txtSalvarInci)
+
+                                btnSalvar.setOnClickListener {
+                                    collecPing.document(id)
+                                        .update(
+                                            mapOf(
+                                                "description" to viewEdt.findViewById<TextView>(
+                                                    R.id.edtDesc
+                                                ).text.toString(),
+                                                "type" to spnType.selectedItem.toString()
+                                            )
+                                        )
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Alterações salvas com sucesso.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+
+                                            alert.dismiss()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Não foi possível salvar as alterações, tente novamente.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+
+                                viewEdt.findViewById<Button>(R.id.btnClose)
+                                    .setOnClickListener {
+                                        alert.dismiss()
+                                    }
+
+                                var i = 0
+                                spnType.setSelection(i)
+
+                                while (spnType.selectedItem != document.data!!["type"]) {
+                                    i++
+                                    spnType.setSelection(i)
+                                }
+
+                                alert = buildEdt.create()
+                                alert.show()
+                                alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            }
                         }
                     } catch (e: IOException) {
 
@@ -698,28 +839,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     ).show()
                 }
 
-            db.collection("users").document(auth.currentUser!!.uid).get()
-                .addOnSuccessListener { document ->
-                        val downVoteArray = document.data!!["downVote"] as ArrayList<String>
-                        val upVoteArray = document.data!!["upVote"] as ArrayList<String>
+            if (auth.currentUser != null) {
+                db.collection("users").document(auth.currentUser!!.uid).get()
+                    .addOnSuccessListener { document ->
+                        val downVoteArray = document.data!!["downVote"] as ArrayList<*>
+                        val upVoteArray = document.data!!["upVote"] as ArrayList<*>
 
                         for (vote in downVoteArray) {
                             if (vote == id) {
                                 downVoted = true
                                 upVoted = false
-                                btnDownVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                                btnDownVote.backgroundTintList =
+                                    getColorStateList(R.color.btnBackground)
                             }
                         }
                         for (vote in upVoteArray) {
                             if (vote == id) {
                                 upVoted = true
                                 downVoted = false
-                                btnUpVote.backgroundTintList = getColorStateList(R.color.btnBackground)
+                                btnUpVote.backgroundTintList =
+                                    getColorStateList(R.color.btnBackground)
                             }
                         }
                     }
 
-            if(auth.currentUser != null){
                 btnDownVote.isEnabled = true
                 btnUpVote.isEnabled = true
             }
@@ -745,7 +888,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 if (grantResults.isEmpty()) {
                     Toast.makeText(
-                        baseContext, "O aplicativo funciona melhor com a sua localização.",
+                        applicationContext,
+                        "O aplicativo funciona melhor com a sua localização.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -775,14 +919,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val modal = BottomSheetDialog(this)
             modal.setContentView(R.layout.user_bottom_sheet)
 
-            modal.findViewById<TextView>(R.id.txtCriar)!!.setOnClickListener {
+            modal.findViewById<Button>(R.id.btnCriar)!!.setOnClickListener {
                 val intent = Intent(this, RegisterActivity::class.java)
                 startActivity(intent)
                 modal.dismiss()
                 finish()
             }
 
-            modal.findViewById<TextView>(R.id.txtEntrar)!!.setOnClickListener {
+            modal.findViewById<Button>(R.id.btnEntrar)!!.setOnClickListener {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 modal.dismiss()
@@ -799,26 +943,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!auth.currentUser!!.isEmailVerified) {
                 val btnVerify = modal.findViewById<Button>(R.id.btnVerify)!!
                 btnVerify.visibility = View.VISIBLE
+
                 btnVerify.setOnClickListener {
                     auth.currentUser!!.sendEmailVerification()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(
-                                    baseContext, "Confirme seu email e realize o login.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                auth.signOut()
-                                modal.dismiss()
-                            } else {
-                                Toast.makeText(
-                                    baseContext, "Algo deu errado, certifique seu email.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                baseContext, "Confirme seu email e realize o login.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            modal.dismiss()
+                            auth.signOut()
                         }
                         .addOnFailureListener {
                             Toast.makeText(
-                                baseContext, "Não foi possível enviar, tente novamente mais tarde.",
+                                baseContext,
+                                "Não foi possível enviar, tente novamente mais tarde.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -856,7 +996,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val modal = BottomSheetDialog(this)
             modal.setContentView(R.layout.glogged_bottom_sheet)
 
-            modal.findViewById<TextView>(R.id.txtUserName)!!.text = auth.currentUser!!.displayName
+            modal.findViewById<TextView>(R.id.txtUserName)!!.text =
+                auth.currentUser!!.displayName
             modal.findViewById<TextView>(R.id.txtUserEmail)!!.text = auth.currentUser!!.email
             modal.findViewById<TextView>(R.id.txtUserUID)!!.text = auth.currentUser!!.uid
 
@@ -902,7 +1043,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     .getCredential(auth.currentUser!!.email.toString(), edtSenha)
 
                 auth.currentUser!!.reauthenticate(credential)
-                    .addOnCompleteListener {
+                    .addOnSuccessListener {
                         try {
                             auth.currentUser!!.delete()
                                 .addOnCompleteListener { task ->
@@ -914,18 +1055,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                     } else {
                                         Toast.makeText(
                                             baseContext,
-                                            "Não foi possível excluir, faça login novamente para excluir essa conta.",
+                                            "Não foi possível excluir, tente novamente.",
                                             Toast.LENGTH_LONG
                                         ).show()
+
                                         auth.signOut()
                                     }
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(
-                                        baseContext,
-                                        "Não foi possível excluir a conta, tente novamente mais tarde.",
-                                        Toast.LENGTH_LONG
-                                    ).show()
                                 }
                         } catch (e: FirebaseAuthRecentLoginRequiredException) {
                             Toast.makeText(
@@ -933,6 +1068,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 "Por favor, faça login novamente para excluir essa conta.",
                                 Toast.LENGTH_SHORT
                             ).show()
+
                             auth.signOut()
                         }
                     }
@@ -943,6 +1079,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         ).show()
                     }
             }
+
             alert.dismiss()
         }
 
@@ -961,33 +1098,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         view.findViewById<Button>(R.id.btnDltAccount)!!.setOnClickListener {
             try {
                 auth.currentUser!!.delete()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                baseContext, "Conta excluída.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                baseContext,
-                                "Por favor, faça login novamente para excluir essa conta.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            auth.signOut()
-                        }
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            baseContext, "Conta excluída.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     .addOnFailureListener {
                         Toast.makeText(
                             baseContext,
-                            "Não foi possível excluir a conta, tente novamente mais tarde.",
+                            "Não foi possível excluir a conta, tente novamente.",
                             Toast.LENGTH_LONG
                         ).show()
+
+                        auth.signOut()
                     }
             } catch (e: FirebaseAuthRecentLoginRequiredException) {
                 Toast.makeText(
                     baseContext, "Por favor, faça login novamente para excluir essa conta.",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 auth.signOut()
             }
 
@@ -1003,4 +1134,3 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 }
-

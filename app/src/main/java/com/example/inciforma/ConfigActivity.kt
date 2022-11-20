@@ -34,7 +34,7 @@ class ConfigActivity : AppCompatActivity() {
                     .getCredential(auth.currentUser!!.email.toString(), edtSenha)
 
                 auth.currentUser!!.reauthenticate(credential)
-                    .addOnCompleteListener {
+                    .addOnSuccessListener {
                         findViewById<RelativeLayout>(R.id.ChangeEmail).visibility = View.VISIBLE
                         findViewById<RelativeLayout>(R.id.ChangeSenha).visibility = View.VISIBLE
                     }
@@ -57,19 +57,29 @@ class ConfigActivity : AppCompatActivity() {
                 ).show()
             } else {
                 auth.currentUser!!.updateEmail(edtNewEmail)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                baseContext,
-                                "Seu email foi atualizado, não esqueça de verificá-lo.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                baseContext, "Algo deu errado.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    .addOnSuccessListener {
+                        auth.currentUser!!.sendEmailVerification()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Seu email foi atualizado, não esqueça de verificá-lo.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    onBackPressed()
+                                    auth.signOut()
+                                } else {
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Não foi possível enviar a verificação. Tente novamente.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    onBackPressed()
+                                    auth.signOut()
+                                }
+                            }
                     }
                     .addOnFailureListener {
                         Toast.makeText(
@@ -91,18 +101,14 @@ class ConfigActivity : AppCompatActivity() {
                 ).show()
             } else {
                 auth.currentUser!!.updatePassword(edtNewSenha)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                baseContext, "Senha atualizada com sucesso.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                baseContext, "Não foi possível atualizar a senha.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            baseContext, "Senha atualizada com sucesso.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        onBackPressed()
+                        auth.signOut()
                     }
                     .addOnFailureListener {
                         Toast.makeText(
@@ -114,6 +120,7 @@ class ConfigActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)

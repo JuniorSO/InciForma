@@ -1,9 +1,11 @@
 package com.example.inciforma
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -21,10 +23,13 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var alert: AlertDialog
 
@@ -56,7 +61,10 @@ class LoginActivity : AppCompatActivity() {
         val txtBtnGLogin = btnGLogin.getChildAt(0) as TextView
         txtBtnGLogin.text = getString(R.string.txtGBtn)
 
+        val btnLogin = findViewById<Button>(R.id.btnLogin)
+
         auth = Firebase.auth
+        db = Firebase.firestore
 
         val clientId = getString(R.string.webClientId)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -68,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         if (auth.currentUser != null) {
-            backInMap()
+            onBackPressed()
         }
 
         findViewById<TextView>(R.id.txtLink).setOnClickListener {
@@ -77,7 +85,9 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        findViewById<Button>(R.id.btnLogin).setOnClickListener {
+        btnLogin.setOnClickListener {
+            btnLogin.isEnabled = false
+
             val edtEmail = findViewById<EditText>(R.id.edtEmail).text.toString()
             val edtSenha = findViewById<EditText>(R.id.edtSenha).text.toString()
 
@@ -88,21 +98,22 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             } else {
                 auth.signInWithEmailAndPassword(edtEmail, edtSenha)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                baseContext, "Aproveite o nosso app!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                    .addOnSuccessListener(this) {
+                        Toast.makeText(
+                            baseContext, "Aproveite o nosso app!",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                            backInMap()
-                        } else {
-                            Toast.makeText(
-                                baseContext,
-                                "Não foi possível entrar na conta. Verifique as informações.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        onBackPressed()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            baseContext,
+                            "Não foi possível entrar na conta. Verifique as informações.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        btnLogin.isEnabled = true
                     }
             }
         }
@@ -115,10 +126,15 @@ class LoginActivity : AppCompatActivity() {
             val build = AlertDialog.Builder(this)
             val view = layoutInflater.inflate(R.layout.dialog_password, null)
 
+            val btnEnviar = view.findViewById<Button>(R.id.btnEnviar)
+
             build.setView(view)
 
             view.findViewById<Button>(R.id.btnClose)!!.setOnClickListener { alert.dismiss() }
-            view.findViewById<Button>(R.id.btnEnviar)!!.setOnClickListener {
+
+            btnEnviar.setOnClickListener {
+                btnEnviar.isEnabled = false
+
                 val edtEmail = view.findViewById<EditText>(R.id.edtEmail).text.toString()
 
                 if (edtEmail.isEmpty()) {
@@ -128,29 +144,23 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                 } else {
                     auth.sendPasswordResetEmail(edtEmail)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(
-                                    baseContext, "Foi enviado o email para troca da senha.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    baseContext,
-                                    "Não foi possível enviar, verifique o email digitado.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                baseContext, "Foi enviado o email para troca da senha.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            alert.dismiss()
                         }
                         .addOnFailureListener {
                             Toast.makeText(
-                                baseContext, "Não foi possível enviar, tente novamente mais tarde.",
+                                baseContext, "Não foi possível enviar, tente novamente.",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            btnEnviar.isEnabled = true
                         }
                 }
-
-                alert.dismiss()
             }
 
             alert = build.create()
@@ -160,10 +170,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        backInMap()
-    }
-
-    private fun backInMap() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
@@ -180,13 +186,33 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task: Task<AuthResult> ->
                 if (task.isSuccessful) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
                     Toast.makeText(
                         baseContext, "Aproveite o nosso app!",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    val votes = hashMapOf(
+                        "downVote" to arrayListOf(""),
+                        "upVote" to arrayListOf(""),
+                    )
+
+                    db.collection("users").document(auth.currentUser!!.uid)
+                        .set(votes)
+                        .addOnSuccessListener {
+                            Log.d(
+                                ContentValues.TAG,
+                                "DocumentSnapshot successfully written!"
+                            )
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(
+                                ContentValues.TAG,
+                                "Error writing document",
+                                e
+                            )
+                        }
+
+                    onBackPressed()
                 } else {
                     Toast.makeText(
                         baseContext, "Não foi possível entrar, tente novamente.",

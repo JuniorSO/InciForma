@@ -2,10 +2,33 @@
     <string name="app_name" translatable="false">InciForma</string>
     <string name="txtBtnAdd">Adicionar Incidente</string>
 
-    <string name="descAbout">Ícone Sobre</string>
-    <string name="descUser">Ícone Usuário</string>
-    <string name="descX">Ícone Fechar</string>
-    <string name="descConfig">Ícone Configuração</string>
+    <string name="txtSearch">Procurar por um lugar…</string>
+
+    <string name="txtCriarInci">Criar Marcador</string>
+    <string name="txtEditarInci">Editar Marcador</string>
+    <string name="txtSalvarInci">Salvar Marcador</string>
+
+    <string name="txtEndereço">Endereço</string>
+    <string name="txtBairro">Bairro</string>
+    <string name="txtDesc">Breve descrição…</string>
+    <string name="descTipoInci">Tipo de Incidente</string>
+
+    <string name="descAbout">Ícone de Ajuda</string>
+    <string name="descUser">Ícone de Usuário</string>
+    <string name="descX">Ícone de Fechar</string>
+    <string name="descConfig">Ícone de Configuração</string>
+    <string name="descSearch">Ícone de Busca</string>
+    <string name="descRefresh">Ícone de Recarga</string>
+    <string name="descDownVote">Ícone de Voto Negativo</string>
+    <string name="descUpVote">Ícone de Voto Positivo</string>
+
+    <string name="plcHldNomeInci">[Tipo de Incidente]</string>
+    <string name="plcHldEnderecoInci">[Endereço do Incidente]</string>
+    <string name="plcHldDescInci">[Descrição do Incidente]</string>
+    <string name="plcHldDataInci">[Data do Incidente]</string>
+
+    <string name="txtEditar">Editar</string>
+    <string name="txtExcluir">Excluir</string>
 
     <string name="txtEmail">Email</string>
     <string name="txtSenha">Senha</string>
@@ -42,8 +65,10 @@
     <string name="txtNewEmail">Novo Email</string>
     <string name="txtSaveEmail">Salvar Email</string>
     <string name="txtAltSenha">Alterar Senha</string>
-    <string name="txtNewSenha">Novo Senha</string>
+    <string name="txtNewSenha">Nova Senha</string>
     <string name="txtSaveSenha">Salvar Senha</string>
+
+    <string name="txtZero">0</string>
 
     <string-array name="tipoInci">
         <item>Acidente Veicular</item>

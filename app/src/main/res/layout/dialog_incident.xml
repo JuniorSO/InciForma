@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_alert"
@@ -10,13 +11,15 @@
     <RelativeLayout
         android:id="@+id/txtTitleAlert"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
 
         <TextView
+            android:id="@+id/txtCriarIncidente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Criar Marcador"
+            android:text="@string/txtCriarInci"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -27,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/descX"
-            app:icon="@drawable/ic_cross" />
+            app:icon="@drawable/ic_cross"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
@@ -36,28 +40,38 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/txtTitleAlert"
-        android:hint="Endereço" />
+        android:autofillHints="postalAddress"
+        android:hint="@string/txtEndereço"
+        android:inputType="textPostalAddress"
+        android:layout_marginBottom="8dp"/>
 
     <EditText
         android:id="@+id/edtBairro"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/edtLocal"
-        android:hint="Bairro" />
+        android:autofillHints="postalAddress"
+        android:hint="@string/txtBairro"
+        android:inputType="textPostalAddress"
+        android:layout_marginBottom="8dp"/>
 
     <Spinner
         android:id="@+id/spnTipo"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/edtBairro"
-        android:contentDescription="Tipo de incidente" />
+        android:contentDescription="@string/descTipoInci"
+        android:layout_marginBottom="8dp"/>
 
     <EditText
         android:id="@+id/edtDesc"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/spnTipo"
-        android:hint="Descrição" />
+        android:hint="@string/txtDesc"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:id="@+id/btnNovoInci"
@@ -65,6 +79,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edtDesc"
         android:layout_alignParentRight="true"
-        android:text="Criar Incidente" />
+        android:text="@string/txtCriarInci" />
 
 </RelativeLayout>

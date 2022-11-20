@@ -41,14 +41,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bgModalColor"
-            android:translationZ="1dp"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="16dp"
+            android:translationZ="1dp">
 
             <EditText
                 android:id="@+id/edtSearch"
                 android:layout_width="284dp"
                 android:layout_height="48dp"
-                android:hint="Procurar por um lugar..." />
+                android:autofillHints="postalAddress"
+                android:hint="@string/txtSearch"
+                android:inputType="textPostalAddress" />
 
             <Button
                 android:id="@+id/btnSearch"
@@ -56,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/edtSearch"
-                android:contentDescription="Ícone de Busca"
+                android:contentDescription="@string/descSearch"
                 app:icon="@drawable/ic_search" />
 
             <Button
@@ -65,8 +67,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:contentDescription="Ícone de Recarregar Mapa"
-                app:icon="@drawable/ic_reload" />
+                android:contentDescription="@string/descRefresh"
+                app:icon="@drawable/ic_reload"
+                tools:ignore="RelativeOverlap" />
         </RelativeLayout>
 
         <fragment xmlns:map="http://schemas.android.com/apk/res-auto"

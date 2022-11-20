@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_alert"
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="[Tipo de Incidente]"
+            android:text="@string/plcHldNomeInci"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/descX"
-            app:icon="@drawable/ic_cross" />
+            app:icon="@drawable/ic_cross"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
@@ -39,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/txtTitleAlert"
         android:layout_marginBottom="8dp"
-        android:text="[Endereço do Incidente]"
+        android:text="@string/plcHldEnderecoInci"
         android:textSize="20sp" />
 
     <TextView
@@ -48,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/inciAddress"
         android:layout_marginBottom="8dp"
-        android:text="[Descrição do Incidente]"
+        android:text="@string/plcHldDescInci"
         android:textSize="16sp" />
 
     <TextView
@@ -56,8 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/inciDesc"
-        android:layout_marginBottom="26dp"
-        android:text="[Data do Incidente]"
+        android:layout_marginBottom="16dp"
+        android:text="@string/plcHldDataInci"
         android:textSize="16sp" />
 
     <Button
@@ -67,7 +69,7 @@
         android:layout_below="@id/inciDate"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="8dp"
-        android:text="Excluir"
+        android:text="@string/txtExcluir"
         android:visibility="invisible" />
 
     <Button
@@ -77,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/inciDate"
         android:layout_toLeftOf="@id/btnDltInci"
-        android:text="Editar"
+        android:text="@string/txtEditar"
         android:visibility="invisible" />
 
     <RelativeLayout
@@ -90,7 +92,7 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Ícone de Voto Negativo"
+            android:contentDescription="@string/descDownVote"
             android:enabled="false"
             app:icon="@drawable/ic_down" />
 
@@ -101,7 +103,7 @@
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="8dp"
             android:layout_toRightOf="@id/btnDownVote"
-            android:text="0"
+            android:text="@string/txtZero"
             android:textSize="16sp" />
 
         <Button
@@ -110,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/inciRate"
-            android:contentDescription="Ícone de Voto Positivo"
+            android:contentDescription="@string/descUpVote"
             android:enabled="false"
             app:icon="@drawable/ic_up" />
 

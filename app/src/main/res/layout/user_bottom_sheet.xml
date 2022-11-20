@@ -9,8 +9,9 @@
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <TextView
-        android:id="@+id/txtCriar"
+    <Button
+        android:id="@+id/btnCriar"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -22,14 +23,15 @@
         android:id="@+id/materialDivider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtCriar"
+        android:layout_below="@id/btnCriar"
         android:layout_marginVertical="16dp" />
 
-    <TextView
-        android:id="@+id/txtEntrar"
+    <Button
+        android:id="@+id/btnEntrar"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/materialDivider"
+        android:layout_below="@id/materialDivider"
         android:layout_centerHorizontal="true"
         android:text="@string/txtEntrar"
         android:textColor="@color/linkTextColor"
