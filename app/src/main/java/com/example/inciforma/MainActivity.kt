@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             MarkerOptions()
                                 .position(LatLng(latitude, longitude))
                                 .title(document.id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
                         )
                     } else if (document.data["type"] == "Morte") {
                         map.addMarker(
@@ -143,6 +143,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 .position(LatLng(latitude, longitude))
                                 .title(document.id)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                        )
+                    } else if (document.data["type"] == "Outro") {
+                        map.addMarker(
+                            MarkerOptions()
+                                .position(LatLng(latitude, longitude))
+                                .title(document.id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         )
                     } else {
                         map.addMarker(
@@ -703,12 +710,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val ping = collecPing.document(id)
             ping.get()
                 .addOnSuccessListener { document ->
+                    val inciDesc = view.findViewById<TextView>(R.id.inciDesc)
+                    val inciDate = view.findViewById<TextView>(R.id.inciDate)
+                    val inciAddress = view.findViewById<TextView>(R.id.inciAddress)
+
                     try {
                         view.findViewById<TextView>(R.id.inciType).text =
                             document.data!!["type"].toString()
-                        view.findViewById<TextView>(R.id.inciDesc).text =
+                        inciDesc.text =
                             document.data!!["description"].toString()
-                        view.findViewById<TextView>(R.id.inciDate).text =
+                        inciDate.text =
                             document.data!!["timePhone"].toString()
                         inciRate.text =
                             document.data!!["rate"].toString()
@@ -719,7 +730,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 1
                             )
                         val address = addresses[0].getAddressLine(0)
-                        view.findViewById<TextView>(R.id.inciAddress).text = address
+                        inciAddress.text = address
 
                         val data = Date().time
 
@@ -730,6 +741,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         if (data > dataLimite) {
                             btnEdtInci.isEnabled = false
                         }
+
+                        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+
+                        view.findViewById<RelativeLayout>(R.id.txtTitleAlert).visibility =
+                            View.VISIBLE
+                        inciAddress.visibility = View.VISIBLE
+                        inciDesc.visibility = View.VISIBLE
+                        inciDate.visibility = View.VISIBLE
+                        view.findViewById<RelativeLayout>(R.id.avaliacao).visibility = View.VISIBLE
 
                         if (auth.currentUser?.uid == "fWun97jpwehIuxkkcaoAiC2W7zu2") {
                             btnEdtInci.visibility = View.VISIBLE

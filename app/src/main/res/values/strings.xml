@@ -22,6 +22,8 @@
     <string name="descDownVote">Ícone de Voto Negativo</string>
     <string name="descUpVote">Ícone de Voto Positivo</string>
 
+    <string name="descBtnCriarInci">Botão Criar Marcador</string>
+
     <string name="plcHldNomeInci">[Tipo de Incidente]</string>
     <string name="plcHldEnderecoInci">[Endereço do Incidente]</string>
     <string name="plcHldDescInci">[Descrição do Incidente]</string>
@@ -72,11 +74,12 @@
 
     <string-array name="tipoInci">
         <item>Acidente Veicular</item>
+        <item>Agressão</item>
+        <item>Explosão</item>
         <item>Morte</item>
         <item>Roubo</item>
-        <item>Explosão</item>
         <item>Tiroteio</item>
-        <item>Agressão</item>
+        <item>Outro</item>
     </string-array>
 
     <string name="webClientId" translatable="false">476836883143-nekic7famq3hov4j74o0i80f90j86a1a.apps.googleusercontent.com</string>

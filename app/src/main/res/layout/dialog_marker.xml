@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_alert"
@@ -12,13 +11,16 @@
         android:id="@+id/txtTitleAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/inciType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/btnClose"
             android:text="@string/plcHldNomeInci"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -30,8 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/descX"
-            app:icon="@drawable/ic_cross"
-            tools:ignore="RelativeOverlap" />
+            app:icon="@drawable/ic_cross" />
 
     </RelativeLayout>
 
@@ -42,7 +43,8 @@
         android:layout_below="@id/txtTitleAlert"
         android:layout_marginBottom="8dp"
         android:text="@string/plcHldEnderecoInci"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/inciDesc"
@@ -51,7 +53,8 @@
         android:layout_below="@id/inciAddress"
         android:layout_marginBottom="8dp"
         android:text="@string/plcHldDescInci"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/inciDate"
@@ -60,7 +63,8 @@
         android:layout_below="@id/inciDesc"
         android:layout_marginBottom="16dp"
         android:text="@string/plcHldDataInci"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnDltInci"
@@ -83,9 +87,11 @@
         android:visibility="invisible" />
 
     <RelativeLayout
+        android:id="@+id/avaliacao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/inciDate">
+        android:layout_below="@id/inciDate"
+        android:visibility="invisible">
 
         <Button
             android:id="@+id/btnDownVote"
@@ -117,5 +123,13 @@
             app:icon="@drawable/ic_up" />
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:progressDrawable="@drawable/spinner_loading" />
 
 </RelativeLayout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_alert"
@@ -18,7 +17,9 @@
             android:id="@+id/txtCriarIncidente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/btnClose"
             android:text="@string/txtCriarInci"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -30,8 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/descX"
-            app:icon="@drawable/ic_cross"
-            tools:ignore="RelativeOverlap" />
+            app:icon="@drawable/ic_cross" />
 
     </RelativeLayout>
 
@@ -79,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edtDesc"
         android:layout_alignParentRight="true"
-        android:text="@string/txtCriarInci" />
+        android:text="@string/txtCriarInci"
+        android:contentDescription="@string/descBtnCriarInci" />
 
 </RelativeLayout>

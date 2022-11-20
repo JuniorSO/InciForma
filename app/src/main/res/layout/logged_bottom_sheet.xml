@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet"
@@ -19,8 +18,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="8dp"
+            android:layout_toStartOf="@+id/btnConfig"
             android:text="@string/txtTitleModal"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -32,8 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/descConfig"
-            app:icon="@drawable/ic_config"
-            tools:ignore="RelativeOverlap" />
+            app:icon="@drawable/ic_config" />
 
     </RelativeLayout>
 
