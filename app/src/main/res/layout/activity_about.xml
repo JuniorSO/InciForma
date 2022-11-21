@@ -148,7 +148,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginBottom="16dp"
                 android:justificationMode="inter_word"
-                android:text="Algumas informações secundárias mas ainda assim, importantes:\n1. Os marcadores permanecem registrados por 5 dias, depois disso são deletados do sistema dentro de 72 horas.\n2. Caso encontre alguma dificuldade ao pesquisar endereços ou registrar um marcador, tente ser mais específico.\n3. Ficaríamos extremamente felizes se vocês pudesse dedicar um pouco do seu tempo nos enviando um email com sua opinião sobre o aplicativo, desde reclamações a sugestões de implementações. Obrigado por utilizar o InciForma!"
+                android:text="Algumas informações secundárias mas ainda assim, importantes:\n1. Os marcadores permanecem registrados por 5 dias, depois disso são deletados do sistema dentro de 72 horas.\n2. Caso encontre alguma dificuldade ao pesquisar endereços ou registrar um marcador, tente ser mais específico.\n3. Ficaríamos extremamente felizes se você pudesse dedicar um pouco do seu tempo nos enviando um email com sua opinião sobre o aplicativo, desde reclamações a sugestões de implementações. Obrigado por utilizar o InciForma!"
                 android:textSize="16sp" />
 
             <TextView
