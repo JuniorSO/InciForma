@@ -371,14 +371,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         } else {
                             Toast.makeText(
-                                baseContext, "Verifique seu email antes de criar incidentes.",
+                                baseContext, "Verifique seu email antes de criar marcadores.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     } else {
                         Toast.makeText(
                             baseContext,
-                            "Você precisa de uma conta ativa antes de criar incidentes.",
+                            "Você precisa de uma conta ativa antes de criar marcadores.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -521,14 +521,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         } else {
                             Toast.makeText(
                                 baseContext,
-                                "Verifique seu email antes de criar incidentes.",
+                                "Verifique seu email antes de criar marcadores.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     } else {
                         Toast.makeText(
                             baseContext,
-                            "Você precisa de uma conta ativa antes de criar incidentes.",
+                            "Você precisa de uma conta ativa antes de criar marcadores.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -556,7 +556,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     .delete()
                     .addOnSuccessListener {
                         Toast.makeText(
-                            baseContext, "Incidente excluído.",
+                            baseContext, "Marcador excluído.",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -564,7 +564,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     .addOnFailureListener {
                         Toast.makeText(
-                            baseContext, "Não foi possível excluir o incidente.",
+                            baseContext, "Não foi possível excluir o marcador.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -844,7 +844,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         alert.dismiss()
 
                         Toast.makeText(
-                            baseContext, "Esse incidente não está disponível.",
+                            baseContext, "Esse marcador não está disponível.",
                             Toast.LENGTH_SHORT
                         ).show()
 

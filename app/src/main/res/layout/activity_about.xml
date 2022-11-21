@@ -1,17 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Essa é a tela lmaooo" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:text="ATENÇÃO"
+        android:textColor="@color/dangerColor"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnMapa"
+    <TextView
+        android:id="@+id/headerBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerTitle"
+        android:layout_marginHorizontal="8dp"
+        android:justificationMode="inter_word"
+        android:text="O aplicativo InciForma não substitui, de nenhuma maneira, qualquer tipo de autoridade. Se presenciar qualquer um dos incidentes citados, não hesite em chamar a emergência!"
+        android:textSize="16sp" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerBody"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="16dp" />
+
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Voltar pro Mapa" />
+        android:layout_below="@id/materialDivider1">
 
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="8dp"
+                android:justificationMode="inter_word"
+                android:text="Como Usar o InciForma?"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title1"
+                android:layout_marginHorizontal="8dp"
+                android:justificationMode="inter_word"
+                android:text="O InciForma nasceu com a ideia de ajudar qualquer pessoa que se preocupa com a própria segurança. Para usá-lo é bem simples. Primeiro, precisamos criar uma conta.\n1. Selecione o botão com ícone de usuário no canto superior direito da tela principal e escolha a opção Criar Conta, se já possui uma, pode selecionar a opção Entrar.\n2. Insira as credenciais que sua conta vai possuir, email e senha. Não se esqueça de inserir um email real, após o cadastro, você deve verificá-lo em seu provedor (Gmail, Outlook, etc). Se não encontrar o email, não se esqueça de verificar a caixa de spam.\n3. Após a verificação, realize o login com a conta criada e você já pode começar a utilizar todas as funcionalidades do aplicativo."
+                android:textSize="16sp" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/body1"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="16dp" />
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/materialDivider2"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Adicionando um Marcador"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/body2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title2"
+                android:layout_marginHorizontal="8dp"
+                android:justificationMode="inter_word"
+                android:text="Após criar uma conta e, por azar, ter presenciado um incidente, depois que todas as medidas foram tomadas, é hora de registrá-lo no aplicativo e informar mais pessoas.\n1. Pressione o botão Adicionar Incidente na tela principal.\n2. Insira dados válidos, com um endereço e um bairro coerentes, selecione o tipo do incidente entre os pré-criados e tente descrever com poucas palavras informações mais específicas no campo de Descrição, não deixe nenhum campo vazio.\n3. Depois de preencher com todos os dados, clique no botão de Criar Marcador, você já vai poder visualizar um pequeno marcador no mapa de coloração ciano. Quando recarregar o mapa utilizando o botão no canto superior direito ou entrar de novo no aplicativo, a cor do incidente mudará para a respectiva do tipo escolhido."
+                android:textSize="16sp" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/body2"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="16dp" />
+
+            <TextView
+                android:id="@+id/title3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/materialDivider3"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Avaliando Outros Incidentes"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/body3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title3"
+                android:layout_marginHorizontal="8dp"
+                android:justificationMode="inter_word"
+                android:text="Agora, depois de aprender a criar seu próprio marcador, iremos começar a avaliar outros marcadores, aumentando a credibilidade deles. Se vocês presenciou algum incidente que já foi registrado ou ouviu dele fora do InciForma, pode avaliá-lo positivamente para aumentar sua veracidade, também pode fazer o contrário caso esteja suspeito de alguma mentira. Avaliar um incidente é bem simples.\n1. Identifique o marcador que você quer avaliar no mapa clicando em cima dele e lendo um pouco suas informações.\n2. Utilize as setas abaixo das informações, pressionando elas, para avaliar este marcador, para cima significa tratá-lo de forma positiva e para baixo, de forma negativa.\n3. Sua escolha ficará salva e você pode mudá-la ou retira-la quantas vezes quiser enquanto o incidente ainda existir."
+                android:textSize="16sp" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/body3"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="16dp" />
+
+            <TextView
+                android:id="@+id/title4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/materialDivider4"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Informações Adicionais"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/body4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title4"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="16dp"
+                android:justificationMode="inter_word"
+                android:text="Algumas informações secundárias mas ainda assim, importantes:\n1. Os marcadores permanecem registrados por 5 dias, depois disso são deletados do sistema dentro de 72 horas.\n2. Caso encontre alguma dificuldade ao pesquisar endereços ou registrar um marcador, tente ser mais específico.\n3. Ficaríamos extremamente felizes se vocês pudesse dedicar um pouco do seu tempo nos enviando um email com sua opinião sobre o aplicativo, desde reclamações a sugestões de implementações. Obrigado por utilizar o InciForma!"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/body4"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="24dp"
+                android:text="vigilante.inciforma@gmail.com"
+                android:textColor="@color/linkTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
